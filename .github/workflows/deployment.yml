@@ -19,14 +19,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Install nx globally
+        run: npm install -g nx
+
+      - name: Build stadtplan
+        run: nx build stadtplan
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with: 
           working-directory: e2e/topicmaps/stadtplan
           config-file: cypress.config.ts
-          start: npm run preview
-          wait-on: 'http://localhost:4173'
+          start: nx serve stadtplan
+          wait-on: 'http://localhost:4200'
           browser: chrome
