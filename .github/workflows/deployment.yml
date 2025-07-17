@@ -19,10 +19,14 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Build
+        run: npm run build
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with: 
-          start: npm run dev
-          wait-on: 'http://localhost:5173'
+          working-directory: e2e/topicmaps/stadtplan
+          config-file: cypress.config.ts
+          start: npm run preview
+          wait-on: 'http://localhost:4173'
           browser: chrome
-          working-directory: e2e
