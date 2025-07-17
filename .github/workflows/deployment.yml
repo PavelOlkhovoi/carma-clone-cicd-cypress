@@ -10,11 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update --recursive --remote
 
       - name: Install Dependencies
         run: npm install
@@ -24,15 +32,3 @@ jobs:
 
       - name: Run e2e tests
         run: npx nx run e2e-stadtplan:e2e
-
-      # - name: Build stadtplan
-      #   run: npx nx build stadtplan --skip-nx-cache
-
-      # - name: Cypress run
-      #   uses: cypress-io/github-action@v6
-      #   with: 
-      #     working-directory: e2e/topicmaps/stadtplan
-      #     config-file: cypress.config.ts
-      #     start: npx nx serve stadtplan
-      #     wait-on: 'http://localhost:4200'
-      #     browser: chrome
