@@ -20,12 +20,12 @@ import LicenseStadtplanTagNacht from "react-cismap/topicmaps/wuppertal/LicenseSt
 import { Link } from "react-scroll";
 // import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import FilterUI from "./FilterUI";
-import {
-  KompaktanleitungSection,
-  MenuTitle,
-  MenuIntroduction,
-  Footer,
-} from "@carma-collab/wuppertal/stadtplan";
+// import {
+//   KompaktanleitungSection,
+//   MenuTitle,
+//   MenuIntroduction,
+//   Footer,
+// } from "@carma-collab/wuppertal/stadtplan";
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 
@@ -151,17 +151,15 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={"bars"}
-        menuTitle={<MenuTitle />}
-        menuFooter={
-          <Footer
-            version={getApplicationVersion(versionData)}
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
-        }
+        // menuTitle={<MenuTitle />}
+        // menuFooter={
+        //   <Footer
+        //     version={getApplicationVersion(versionData)}
+        //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        //   />
+        // }
         menuIntroduction={
-          <MenuIntroduction
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
+         <div></div>
         }
         menuSections={[
           <Section
@@ -172,7 +170,7 @@ const Menu = () => {
             sectionContent={<FilterUI />}
           />,
           <DefaultSettingsPanel key="settings" />,
-          <KompaktanleitungSection />,
+          // <KompaktanleitungSection />,
           // <GenericDigitalTwinReferenceSection />,
         ]}
       />
