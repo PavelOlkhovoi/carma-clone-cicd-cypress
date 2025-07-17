@@ -22,8 +22,8 @@ jobs:
       - name: Install nx globally
         run: npm install -g nx
 
-      # - name: Build stadtplan
-      #   run: npx nx build stadtplan --skip-nx-cache
+      - name: Build stadtplan
+        run: npx nx build stadtplan --skip-nx-cache
 
       - name: Cypress run
         uses: cypress-io/github-action@v6

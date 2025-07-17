@@ -12,12 +12,12 @@ import {
   TopicMapSelectionContent,
   useSelectionTopicMap,
 } from "@carma-apps/portals";
-import {
-  InfoBoxTextContent,
-  InfoBoxTextTitle,
-  MenuTooltip,
-  searchTextPlaceholder,
-} from "@carma-collab/wuppertal/stadtplan";
+// import {
+//   InfoBoxTextContent,
+//   InfoBoxTextTitle,
+//   MenuTooltip,
+//   searchTextPlaceholder,
+// } from "@carma-collab/wuppertal/stadtplan";
 import { EmptySearchComponent } from "@carma-mapping/fuzzy-search";
 import IconComp from "react-cismap/commons/Icon";
 import { getPoiClusterIconCreatorFunction } from "./helper/styler";
@@ -76,7 +76,7 @@ const Stadtplankarte = ({ poiColors }) => {
               pixelwidth={
                 responsiveState === "normal" ? "300px" : windowSize.width - gap
               }
-              placeholder={searchTextPlaceholder}
+              placeholder='Wohin'
             />
           </div>
         </Control>
@@ -87,7 +87,7 @@ const Stadtplankarte = ({ poiColors }) => {
           zoomControls={false}
           gazetteerSearchControl={true}
           gazetteerSearchComponent={EmptySearchComponent}
-          applicationMenuTooltipString={<MenuTooltip />}
+          // applicationMenuTooltipString={<MenuTooltip />}
           infoBox={
             filterState === undefined || filterState.positiv.length > 0 ? (
               <GenericInfoBoxFromFeature
@@ -101,8 +101,8 @@ const Stadtplankarte = ({ poiColors }) => {
                       plural: "POIs",
                     },
                   },
-                  noFeatureTitle: <InfoBoxTextTitle />,
-                  noCurrentFeatureContent: <InfoBoxTextContent />,
+                  noFeatureTitle: <div></div>,
+                  noCurrentFeatureContent: <div></div>,
                 }}
                 captionFactory={(linkUrl, feature) => {
                   const urheber =
