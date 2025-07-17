@@ -23,13 +23,13 @@ jobs:
         run: npm install -g nx
 
       - name: Build stadtplan
-        run: npx nx build topicmaps-stadtplan --skip-nx-cache
+        run: npx nx build stadtplan --skip-nx-cache
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with: 
           working-directory: e2e/topicmaps/stadtplan
           config-file: cypress.config.ts
-          start: npx nx serve topicmaps-stadtplan
+          start: npx nx serve stadtplan
           wait-on: 'http://localhost:4200'
           browser: chrome
