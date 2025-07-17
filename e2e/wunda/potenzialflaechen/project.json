@@ -1,0 +1,26 @@
+{
+  "name": "e2e-potenzialflaechen",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/wunda/potenzialflaechen/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["potenzialflaechen-online"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "e2e/wunda/potenzialflaechen/cypress.config.ts",
+        "devServerTarget": "potenzialflaechen-online:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "potenzialflaechen-online:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

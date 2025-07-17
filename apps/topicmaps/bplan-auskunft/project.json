@@ -1,0 +1,77 @@
+{
+  "name": "bplan-auskunft",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/topicmaps/bplan-auskunft/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "logLevel": "info",
+        "buildLibsFromSource": true,
+        "skipTypeCheck": true,
+        "outputPath": "dist/apps/topicmaps/bplan-auskunft"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "bplan-auskunft:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "bplan-auskunft:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "bplan-auskunft:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "bplan-auskunft:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "bplan-auskunft:build:development"
+        },
+        "production": {
+          "buildTarget": "bplan-auskunft:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/apps/topicmaps/bplan-auskunft"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "bplan-auskunft:build"
+      }
+    }
+  }
+}

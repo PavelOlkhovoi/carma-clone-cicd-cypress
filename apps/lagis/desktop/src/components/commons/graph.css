@@ -1,0 +1,17 @@
+.history-wrapper text:last-child {
+  /* fill: white; */
+}
+.history-wrapper g {
+  cursor: pointer;
+}
+.history-wrapper g ellipse {
+  /* fill: #1677ff; */
+}
+
+#node1 ellipse {
+  /* fill: #1677ff; */
+}
+
+.single-node .react-flow__handle {
+  display: none;
+}

@@ -1,0 +1,25 @@
+div.left_oriented_timeline_container_with_content_on_both_sides
+  div.ant-timeline-item-label {
+  width: calc(25% - 12px) !important;
+}
+
+div.left_oriented_timeline_container_with_content_on_both_sides
+  div.ant-timeline-item-content {
+  left: calc(30% - 4px) !important;
+  width: calc(70% - 4px) !important;
+}
+
+div.left_oriented_timeline_container_with_content_on_both_sides
+  div.ant-timeline-item-tail {
+  left: 30% !important;
+}
+
+div.left_oriented_timeline_container_with_content_on_both_sides
+  div.ant-timeline-item-head {
+  left: 30% !important;
+}
+
+div.left_oriented_timeline_container_without_labels
+  div.ant-timeline-item-head:has(div.xxx2) {
+  margin-block-start: 12px !important;
+}

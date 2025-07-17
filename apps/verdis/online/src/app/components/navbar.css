@@ -1,0 +1,14 @@
+.navbar-nav > li > a:hover {
+  color: #fff !important;
+  background-color: transparent !important;
+  text-decoration: none;
+}
+
+.navbar-nav > .active > a {
+  background-image: linear-gradient(
+    to bottom,
+    #080808 0,
+    #0f0f0f 100%
+  ) !important;
+  background-repeat: repeat-x !important;
+}

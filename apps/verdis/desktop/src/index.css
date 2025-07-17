@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  background-color: #fff;
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 12px;
+  border: 2px solid #fff;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+a {
+  color: inherit !important;
+}
+
+.custom-left-control {
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  bottom: 38px;
+  margin-left: 14px;
+  margin-bottom: 5px;
+}

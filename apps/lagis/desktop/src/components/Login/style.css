@@ -1,0 +1,24 @@
+.login-page {
+  background-color: #dfe9f2;
+}
+.logo-div {
+  display: flex;
+}
+.left-section-content {
+  text-align: center;
+}
+.title-border {
+  width: 20%;
+  height: 4px;
+  background-color: #1890ff;
+  margin: auto;
+}
+.form {
+  width: 53%;
+  margin: auto;
+  padding-top: 60px;
+}
+
+.bg-rain {
+  background-image: url(../../assets/simon-wierzba-4N0uFUstIJk-unsplash.jpg);
+}

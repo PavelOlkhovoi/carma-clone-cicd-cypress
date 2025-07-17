@@ -1,0 +1,111 @@
+img {
+  max-width: 300px !important;
+  max-width: 150px;
+}
+
+.rc-md-editor .rc-md-navigation {
+  min-height: 33px;
+  padding: 0 8px 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 0px solid #f6f8fa;
+  font-size: 16px;
+  background: #f5f5f5;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row-reverse;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.rc-md-editor .rc-md-navigation .navigation-nav.left.hide-tools {
+  display: none;
+}
+.rc-md-editor .rc-md-navigation .navigation-nav.right {
+  margin-right: auto;
+}
+
+.rc-md-editor .rc-md-divider {
+  display: block;
+  width: 1px;
+  background-color: #e0e0e0;
+  margin: 0 5px;
+}
+
+.mode-btn-toggle {
+  position: relative;
+  min-width: 90px;
+  height: 40px;
+  margin-left: 0px;
+  margin-right: 3px;
+  display: inline-block;
+  cursor: pointer;
+  line-height: 43px;
+  text-align: center;
+  color: #757575;
+  border: none;
+  background-color: transparent;
+}
+.mode-btn-toggle:hover {
+  color: #111111;
+}
+
+.mode-btn-toggle-active {
+  position: relative;
+  min-width: 90px;
+  height: 40px;
+  margin-left: 0px;
+  margin-right: 3px;
+  display: inline-block;
+  cursor: pointer;
+  line-height: 43px;
+  text-align: center;
+  color: #757575;
+  background-color: white;
+  border: none;
+  border-radius: 6px 6px 0 0;
+}
+.mode-btn-toggle-active:hover {
+  color: #111111;
+}
+
+.save-button:hover {
+  color: #111111;
+}
+
+.custom-file-input {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-file-input input {
+  display: none;
+}
+
+.custom-file-input label {
+  /* background-color: #3498db;
+  color: #fff; */
+  /* padding: 10px 15px; */
+  /* border-radius: 5px; */
+  cursor: pointer;
+  display: inline-block;
+}
+
+.custom-file-input img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  vertical-align: middle;
+}

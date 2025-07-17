@@ -1,0 +1,12 @@
+.cross-data .ant-tabs {
+  height: 100%;
+}
+.cross-data .ant-tabs .ant-tabs-content-holder .ant-tabs-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 1.2rem;
+}
+.cross-data .ant-tabs .ant-tabs-content-holder .ant-tabs-content div {
+  flex-grow: 1;
+}

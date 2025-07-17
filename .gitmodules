@@ -1,0 +1,10 @@
+[submodule "libraries/collaboration/carma-wuppertal-collab/wuppertal-collab-submodule"]
+	path = libraries/collaboration/carma-wuppertal-collab/wuppertal-collab-submodule
+	url = https://github.com/cismet-collab/carma-wuppertal-collab.git
+	branch = main
+    ignore = all
+[submodule "libraries/collaboration/carma-pecher-collab/pecher-collab-submodule"]
+	path = libraries/collaboration/carma-pecher-collab/pecher-collab-submodule
+	url = https://github.com/cismet-collab/carma-pecher-collab.git
+	branch = main
+	ignore = all

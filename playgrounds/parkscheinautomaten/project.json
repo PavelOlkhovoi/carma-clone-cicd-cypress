@@ -1,0 +1,61 @@
+{
+  "name": "parkscheinautomaten",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "playgrounds/parkscheinautomaten/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/playgrounds/parkscheinautomaten"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "parkscheinautomaten:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "parkscheinautomaten:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "parkscheinautomaten:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "parkscheinautomaten:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "parkscheinautomaten:build:development"
+        },
+        "production": {
+          "buildTarget": "parkscheinautomaten:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

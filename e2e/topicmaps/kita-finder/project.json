@@ -1,0 +1,26 @@
+{
+  "name": "e2e-kita-finder",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/topicmaps/kita-finder/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["kita-finder"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "e2e/topicmaps/kita-finder/cypress.config.ts",
+        "devServerTarget": "kita-finder:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "kita-finder:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

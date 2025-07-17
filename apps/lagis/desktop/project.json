@@ -1,0 +1,113 @@
+{
+  "name": "lagis-desktop",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lagis/desktop/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/lagis/desktop"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "lagis-desktop:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "lagis-desktop:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "lagis-desktop:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "lagis-desktop:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "lagis-desktop:build:development"
+        },
+        "production": {
+          "buildTarget": "lagis-desktop:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/apps/lagis/desktop"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "lagis-desktop:build"
+      }
+    },
+    "getVersion_": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo PCKG_VERSION=$(cat $(pwd)/package.json | jq -r '.version') > {projectRoot}/.env"
+      }
+    },
+    "getVersion": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo PCKG_VERSION=$(node -p \"require('./package.json').version\") > {projectRoot}/.env"
+      }
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "dependsOn": ["build", "getVersion"],
+      "options": {
+        "engine": "docker",
+        "platforms": ["linux/amd64", "linux/arm64"],
+        "push": true,
+        "metadata": {
+          "images": ["cismet/carma-{projectName}"],
+          "load": true,
+          "tags": [
+            "type=schedule",
+            "type=ref,event=tag",
+            "type=ref,event=pr",
+            "type=sha,prefix=sha-",
+            "type=raw,$PCKG_VERSION",
+            "type=raw,latest"
+          ]
+        }
+      }
+    },
+    "envtest": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "X=1; echo TESTING: $X . {projectName} {projectRoot}"
+      }
+    }
+  }
+}

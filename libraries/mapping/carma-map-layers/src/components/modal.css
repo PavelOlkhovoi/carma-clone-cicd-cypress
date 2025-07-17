@@ -1,0 +1,22 @@
+.modal-content {
+  height: 100%;
+  padding: 0 !important;
+  margin: 0;
+  overflow: hidden !important;
+}
+
+.ant-tabs-nav {
+  margin: 0 !important;
+}
+
+.ant-modal-body {
+  height: 100%;
+}
+
+.ant-modal-mask {
+  z-index: 1002 !important;
+}
+
+.ant-modal-wrap {
+  z-index: 1002 !important;
+}

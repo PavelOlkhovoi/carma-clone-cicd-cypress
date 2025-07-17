@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "allowJs": true,
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true
+  }
+}

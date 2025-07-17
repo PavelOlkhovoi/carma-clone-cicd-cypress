@@ -1,0 +1,5 @@
+Die Wohnlagenkarte der Stadt Wuppertal gibt einen Überblick über die Qualität von Wohnlagen im Stadtgebiet. Sie unterteilt zusammenhängende Wohnbereiche in vier Kategorien: einfache, mittlere, gute und exklusive Wohnlagen. Die Einstufung erfolgt nach dem überwiegenden Charakter eines Gebiets und berücksichtigt dabei unter anderem städtebauliche Struktur, Erreichbarkeit, Umgebung und Infrastruktur.
+
+Erstellt und jährlich aktualisiert wird die Karte vom Gutachterausschuss für Grundstückswerte in der Stadt Wuppertal. Sie dient als fachliche Grundlage für verschiedene städtische Planungs- und Bewertungsprozesse, insbesondere auch für den qualifizierten Mietspiegel der Stadt, der auf der Wohnlagenbewertung basiert.
+
+Die Karte unterstützt Bürgerinnen und Bürger dabei, sich über das Wohnumfeld in unterschiedlichen Stadtteilen zu informieren – sei es bei der Wohnungssuche, bei Investitionsentscheidungen oder zur allgemeinen Orientierung. Dabei ist zu beachten, dass die Wohnlagenbewertung sich auf den Gesamtcharakter eines Gebiets bezieht und nicht zwingend die individuelle Lagequalität einzelner Grundstücke widerspiegelt.

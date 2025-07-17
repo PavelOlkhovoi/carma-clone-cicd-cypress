@@ -1,0 +1,7 @@
+.ant-input {
+  background-color: #00000000 !important;
+}
+
+::placeholder {
+  color: black !important;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "e2e-klimaorte",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/topicmaps/klimaorte/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["klimaorte"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "e2e/topicmaps/klimaorte/cypress.config.ts",
+        "devServerTarget": "klimaorte:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "klimaorte:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

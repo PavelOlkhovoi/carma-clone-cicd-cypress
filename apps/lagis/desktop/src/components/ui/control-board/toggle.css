@@ -1,0 +1,44 @@
+.custom-modal-wrapper .ant-modal-content {
+  background-color: #f1f1f1;
+}
+
+.custom-modal-wrapper .ant-modal-header {
+  background-color: transparent;
+}
+
+.history-modal-wrapper .ant-modal-content {
+  background-color: #f1f1f1;
+  padding: 0px;
+}
+
+.history-modal-wrapper .ant-modal-header {
+  background-color: transparent;
+  padding: 10px 10px;
+}
+.history-modal-wrapper .ant-modal-body {
+  padding: 4px 10px;
+}
+.history-modal-wrapper .ant-modal-header {
+  background-color: white;
+}
+.history-modal-wrapper .ant-modal-footer {
+  padding: 6px 10px;
+  margin-top: 0;
+}
+.history-modal-wrapper .ant-modal-close {
+  top: 12px;
+}
+
+.history-modal-wrapper .ant-table-tbody {
+  padding: 2px 16px;
+  height: 35px;
+}
+
+.history-modal-wrapper .ant-table-tbody > tr > td {
+  padding: 2px 16px;
+  height: 35px;
+}
+.history-modal-wrapper .ant-table-thead > tr > th {
+  padding: 2px 16px;
+  height: 40px;
+}

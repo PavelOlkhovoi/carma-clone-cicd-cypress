@@ -1,0 +1,61 @@
+{
+  "name": "hitzeinderstadt",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/topicmaps/hitzeinderstadt/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/topicmaps/hitzeinderstadt"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "hitzeinderstadt:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "hitzeinderstadt:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "hitzeinderstadt:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "hitzeinderstadt:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "hitzeinderstadt:build:development"
+        },
+        "production": {
+          "buildTarget": "hitzeinderstadt:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.select-header .ant-select .ant-select-selector {
+  height: 26px;
+  font-size: 12px;
+}
+.select-header .ant-select-selector .ant-select-selection-item {
+  line-height: 23px;
+}

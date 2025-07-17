@@ -1,0 +1,18 @@
+.dashboard-tile {
+  /* flex-basis: calc(50% - 8px); */
+}
+.dashboard-icon {
+  text-align: right;
+}
+
+/* .ant-card .ant-card-actions {
+  border-top: 0px solid #f0f0f0;
+}
+
+.ant-card .ant-card-actions > li {
+  margin: 0px;
+}
+
+.ant-card .ant-card-head {
+  border-bottom: 0px solid white;
+} */

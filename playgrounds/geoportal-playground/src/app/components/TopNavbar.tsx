@@ -1,0 +1,378 @@
+import { useContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Button, Popover, Radio, Tooltip, message } from "antd";
+import {
+  faBars,
+  faLayerGroup,
+  faPrint,
+  faRedo,
+  faShareNodes,
+  faEye,
+  faEyeSlash,
+  faF,
+  faFileExport,
+  faBookOpenReader,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
+
+import type { Item, Layer } from "@carma-commons/types";
+import { useOverlayHelper } from "@carma-commons/ui/lib-helper-overlay";
+import { cn } from "@carma-commons/utils";
+import { LayerLib } from "@carma-mapping/layers";
+
+import { getThumbnails, setThumbnail } from "../store/slices/layers";
+import {
+  appendLayer,
+  deleteSavedLayerConfig,
+  getBackgroundLayer,
+  getFocusMode,
+  getLayers,
+  getSavedLayerConfigs,
+  getSelectedMapLayer,
+  removeLayer,
+  setBackgroundLayer,
+  setFocusMode,
+  setLayers,
+} from "../store/slices/mapping";
+import Share from "./Share";
+import {
+  getShowLayerButtons,
+  setShowLayerButtons,
+  setMode,
+  getMode,
+} from "../store/slices/ui";
+import Save from "./Save";
+import { layerMap } from "../helper/layer";
+import "./switch.css";
+
+const TopNavbar = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setAppMenuVisible } =
+    useContext<typeof UIDispatchContext>(UIDispatchContext);
+  const backgroundLayer = useSelector(getBackgroundLayer);
+  const selectedMapLayer = useSelector(getSelectedMapLayer);
+  const dispatch = useDispatch();
+  const thumbnails = useSelector(getThumbnails);
+  const activeLayers = useSelector(getLayers);
+  const showLayerButtons = useSelector(getShowLayerButtons);
+  const focusMode = useSelector(getFocusMode);
+  const savedLayerConfigs = useSelector(getSavedLayerConfigs);
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const mode = useSelector(getMode);
+  const menuTourRef = useOverlayHelper({
+    primary: {
+      key: "Menüleiste",
+      containerPos: "center",
+      contentPos: "center",
+      content: <div>Menüleiste</div>,
+    },
+  });
+  const hintergrundTourRef = useOverlayHelper({
+    primary: {
+      key: "Hintergrund",
+      containerPos: "center",
+      contentPos: "center",
+      content: <div>Hintergrund</div>,
+    },
+  });
+
+  const extractVectorStyles = (keywords: string[]) => {
+    let vectorObject = null;
+
+    if (keywords) {
+      keywords.forEach((keyword) => {
+        if (keyword.startsWith("carmaConf://")) {
+          const objectString = keyword.slice(12);
+          let colonIndex = objectString.indexOf(":");
+          const property = objectString.split(":")[0];
+          let value =
+            colonIndex !== -1
+              ? objectString.substring(colonIndex + 1).trim()
+              : "";
+          const object = { [property]: value };
+          vectorObject = object;
+        }
+      });
+    }
+
+    return vectorObject;
+  };
+
+  const updateLayers = (
+    layer: Item,
+    deleteItem: boolean = false,
+    forceWMS: boolean = false
+  ) => {
+    let newLayer: Layer;
+
+    if (layer.type === "collection") {
+      if (deleteItem) {
+        dispatch(deleteSavedLayerConfig(layer.id));
+      } else {
+        try {
+          dispatch(setLayers(layer.layers));
+          messageApi.open({
+            type: "success",
+            content: `${layer.title} wurde erfolgreich angewandt.`,
+          });
+        } catch {
+          messageApi.open({
+            type: "error",
+            content: `Es gab einen Fehler beim anwenden von ${layer.title}`,
+          });
+        }
+      }
+      return;
+    }
+
+    if (layer.type === "layer") {
+      const vectorObject = extractVectorStyles(layer.keywords);
+      if (vectorObject && !forceWMS) {
+        newLayer = {
+          title: layer.title,
+          id: layer.id,
+          layerType: "vector",
+          opacity: 0.7,
+          description: layer.description,
+          visible: true,
+          props: {
+            style: vectorObject.vectorStyle,
+          },
+          other: {
+            ...layer,
+          },
+        };
+      } else {
+        switch (layer.layerType) {
+          case "wmts": {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: "wmts",
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                url: layer.props.url,
+                legend: layer.props.Style[0].LegendURL,
+                name: layer.props.Name,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
+          case "vector": {
+            newLayer = {
+              title: layer.title,
+              id: layer.id,
+              layerType: "vector",
+              opacity: 0.7,
+              description: layer.description,
+              visible: true,
+              props: {
+                style: layer.props.style,
+              },
+              other: {
+                ...layer,
+              },
+            };
+            break;
+          }
+        }
+      }
+    }
+
+    if (activeLayers.find((activeLayer) => activeLayer.id === layer.id)) {
+      try {
+        dispatch(removeLayer(layer.id));
+        messageApi.open({
+          type: "success",
+          content: `${layer.title} wurde erfolgreich entfernt.`,
+        });
+      } catch {
+        messageApi.open({
+          type: "error",
+          content: `Es gab einen Fehler beim entfernen von ${layer.title}`,
+        });
+      }
+    } else {
+      try {
+        dispatch(appendLayer(newLayer));
+        messageApi.open({
+          type: "success",
+          content: `${layer.title} wurde erfolgreich hinzugefügt.`,
+        });
+      } catch {
+        messageApi.open({
+          type: "error",
+          content: `Es gab einen Fehler beim hinzufügen von ${layer.title}`,
+        });
+      }
+    }
+  };
+
+  return (
+    <div className="h-16 w-full flex items-center relative justify-between py-2 px-[12px]">
+      {contextHolder}
+      <LayerLib
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        setAdditionalLayers={updateLayers}
+        setThumbnail={(thumbnail) => {
+          dispatch(setThumbnail(thumbnail));
+        }}
+        thumbnails={thumbnails}
+        activeLayers={activeLayers}
+        customCategories={[
+          {
+            Title: "Meine Zusammenstellungen",
+            // @ts-expect-error
+            layers: savedLayerConfigs,
+          },
+        ]}
+        addFavorite={() => {}}
+        removeFavorite={() => {}}
+        updateActiveLayer={() => {}}
+      />
+
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2">
+          <p className="mb-0 font-semibold text-lg">
+            DigiTal Zwilling / Geoportal
+          </p>
+        </div>
+      </div>
+      <div
+        ref={menuTourRef}
+        className="flex items-center gap-6 absolute left-1/2 -ml-[98px]"
+      >
+        <Tooltip title="Refresh">
+          <button
+            onClick={() => {
+              window.location.reload();
+            }}
+            className="text-xl hover:text-gray-600"
+          >
+            <FontAwesomeIcon icon={faRedo} />
+          </button>
+        </Tooltip>
+        <Tooltip title="Layer">
+          <FontAwesomeIcon
+            icon={faLayerGroup}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+            className="cursor-pointer text-xl"
+          />
+        </Tooltip>
+        <Tooltip title="Fokus">
+          <button
+            className={cn("text-xl", focusMode ? "text-blue-500" : "")}
+            onClick={() => {
+              dispatch(setFocusMode(!focusMode));
+            }}
+          >
+            <FontAwesomeIcon icon={faF} />
+          </button>
+        </Tooltip>
+        <Tooltip title="Drucken">
+          <FontAwesomeIcon icon={faPrint} className="text-xl text-gray-300" />
+        </Tooltip>
+        <Tooltip
+          title={`Layer Buttons ${
+            showLayerButtons ? "ausblenden" : "anzeigen"
+          }`}
+        >
+          <button
+            className="text-xl hover:text-gray-600"
+            onClick={() => {
+              dispatch(setShowLayerButtons(!showLayerButtons));
+            }}
+          >
+            <FontAwesomeIcon icon={showLayerButtons ? faEye : faEyeSlash} />
+          </button>
+        </Tooltip>
+        <Tooltip title="Speichern">
+          <Popover trigger="click" placement="bottom" content={<Save />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faFileExport} />
+            </button>
+          </Popover>
+        </Tooltip>
+        <Tooltip title="Hilfe Overlay">
+          <Popover trigger="click" placement="bottom">
+            <button
+              className="hover:text-gray-600 text-xl"
+              onClick={() => {
+                if (mode === "default") {
+                  dispatch(setMode("tour"));
+                } else {
+                  dispatch(setMode("default"));
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faBookOpenReader} />
+            </button>
+          </Popover>
+        </Tooltip>
+        <Tooltip title="Teilen">
+          <Popover trigger="click" placement="bottom" content={<Share />}>
+            <button className="hover:text-gray-600 text-xl">
+              <FontAwesomeIcon icon={faShareNodes} />
+            </button>
+          </Popover>
+        </Tooltip>
+      </div>
+      <div className="flex items-center gap-6">
+        <div className="lg:flex hidden" ref={hintergrundTourRef}>
+          <Radio.Group
+            value={backgroundLayer.id}
+            onChange={(e) => {
+              if (e.target.value === "karte") {
+                dispatch(
+                  setBackgroundLayer({ ...selectedMapLayer, id: "karte" })
+                );
+              } else {
+                dispatch(
+                  setBackgroundLayer({
+                    id: e.target.value,
+                    title: layerMap[e.target.value].title,
+                    opacity: 1.0,
+                    description: layerMap[e.target.value].description,
+                    inhalt: layerMap[e.target.value].inhalt,
+                    eignung: layerMap[e.target.value].eignung,
+                    layerType: "wmts",
+                    visible: true,
+                    props: {
+                      name: "",
+                      url: layerMap[e.target.value].url,
+                    },
+                    layers: layerMap[e.target.value].layers,
+                  })
+                );
+              }
+            }}
+          >
+            <Radio.Button value="karte">Karte</Radio.Button>
+            <Radio.Button value="luftbild">Luftbild</Radio.Button>
+          </Radio.Group>
+        </div>
+
+        <Button
+          onClick={() => {
+            setAppMenuVisible(true);
+          }}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default TopNavbar;

@@ -1,0 +1,85 @@
+{
+  "name": "verdis-online",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/verdis/online/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/verdis/online"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      },
+      "inputs": [
+        "default", 
+        { "env": "VITE_CIDS_SERVICE" }
+      ]  
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "verdis-online:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "verdis-online:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "verdis-online:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "verdis-online:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "verdis-online:build:development"
+        },
+        "production": {
+          "buildTarget": "verdis-online:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/apps/verdis/online"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+     "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "dependsOn": ["build"],
+      "options": {
+        "engine": "docker",
+        "platforms": ["linux/amd64", "linux/arm64"],
+        "push": true
+      },
+      "inputs": [
+        "default", 
+        { "env": "VITE_CIDS_SERVICE" }
+      ]  
+    }
+  }
+}

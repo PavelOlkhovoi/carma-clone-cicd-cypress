@@ -1,0 +1,68 @@
+{
+  "name": "fuzzy-search-playground",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "playgrounds/fuzzy-search-playground/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/playgrounds/fuzzy-search-playground"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "fuzzy-search-playground:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fuzzy-search-playground:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "fuzzy-search-playground:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "fuzzy-search-playground:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fuzzy-search-playground:build:development"
+        },
+        "production": {
+          "buildTarget": "fuzzy-search-playground:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/playgrounds/fuzzy-search-playground"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

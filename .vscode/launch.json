@@ -1,0 +1,69 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Geoportal:4200",
+      "url": "http://localhost:4200/#/?lat=51.271203983073185&lng=7.202490270137788&zoom=18",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/apps/geoportal/src/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "HGK:4200",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/envirometrics/wuppertal/floodingmap/src/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "FNP-Inspektor:4200",
+      "url": "http://localhost:4200/#/rechtsplan?lat=51.273485112588936&lng=7.12272028253416&zoom=17&aevVisible=true",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/apps//topicmaps/fnp-inspektor/src/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "BPlan Auskunft:4200",
+      "url": "http://localhost:4200/#/?lat=51.25881883432255&lng=7.147081108943919&zoom=13",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/apps//topicmaps/bplan-auskunft/src/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Trinkbrunnen orig:4200",
+      "url": "http://localhost:4200/#/Trinkbrunnenkarte_Wuppertal_orig?lat=51.2811455511234&lng=7.2175776958465585&zoom=16",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/apps/topicmaps/generic/src/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Cesium Reference orig:4200",
+      "url": "http://localhost:4200/#/measurements",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "http://localhost:4200/src/*": "${workspaceFolder}/playgrounds/cesium-reference/src/*"
+      }
+    }
+  ]
+}

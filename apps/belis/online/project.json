@@ -1,0 +1,61 @@
+{
+  "name": "belis-online",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/belis/online//src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/belis/online"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "belis-online:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "belis-online:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "belis-online:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "belis-online:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "belis-online:build:development"
+        },
+        "production": {
+          "buildTarget": "belis-online:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

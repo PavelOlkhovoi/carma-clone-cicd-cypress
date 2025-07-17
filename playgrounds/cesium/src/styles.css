@@ -1,0 +1,21 @@
+/* @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"); */
+
+.cesium-widget-credits {
+  display: none !important;
+}
+
+.leafletlike-container {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+  border-radius: 4px;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}

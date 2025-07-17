@@ -1,0 +1,89 @@
+::-webkit-scrollbar {
+  background-color: #fff;
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 12px;
+  border: 2px solid #fff;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #babac0 #fff;
+}
+
+.excalidraw-custom-wrapper .excalidraw .layer-ui__wrapper__top-right label {
+  display: none !important;
+}
+
+.excalidraw .mobile-misc-tools-container .default-sidebar-trigger {
+  display: none;
+}
+
+.excalidraw-custom-wrapper.only-view-mode .excalidraw .main-menu-trigger {
+  display: none !important;
+}
+
+.ant-collapse-header {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
+.ant-collapse-content-box {
+  padding: 4px 0px !important;
+}
+
+.ant-input-affix-wrapper:hover {
+  border-color: #6965db !important;
+}
+.ant-input-affix-wrapper:focus {
+  border-color: #6965db !important;
+}
+
+.ant-input-affix-wrapper:focus-within {
+  border-color: #6965db !important;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+  grid-auto-rows: 1fr;
+}
+
+.grid-container::before {
+  content: "";
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.grid-container > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+/* Just to make the grid visible */
+
+.grid-container > * {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px white solid;
+}
+
+.icon-wrapper-width {
+  flex: "0 0";
+  aspect-ratio: "1 / 1";
+  width: calc(20%-2px);
+  padding: "8px";
+  display: "flex";
+  align-items: "center";
+  justify-content: "center";
+  border: "1px solid #ECECF4";
+}

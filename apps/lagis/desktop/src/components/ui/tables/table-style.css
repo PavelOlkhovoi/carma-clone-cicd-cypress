@@ -1,0 +1,41 @@
+.table-cover {
+  background-color: #fafafa;
+}
+
+.table-cover .ant-table {
+  font-size: 14px;
+}
+
+.ant-table-tbody {
+  height: 69px;
+  padding: 0px;
+}
+
+.table-wrapper .ant-table-tbody > tr > td {
+  padding: 9px 10px;
+  cursor: pointer;
+}
+
+.table-wrapper .ant-table-pagination-right {
+  justify-content: center;
+}
+
+.nfk-cover .ant-table-tbody {
+  /* font-size: 10px; */
+}
+
+.nfk-cover .ant-table-thead > tr > th {
+  height: 10px;
+  padding: 12px 10px;
+}
+
+.nfk-cover .ant-table-tbody > tr > td {
+  padding: 9px 10px;
+}
+
+.table-cover .ant-table-row .ant-table-row-level-0 .active-row tr > th {
+  background-color: rebeccapurple;
+  font-size: 20px;
+  line-height: 2;
+  border: 2px solid red;
+}

@@ -1,0 +1,10 @@
+.custom-card .ant-card-head-title {
+  overflow: visible;
+  white-space: normal;
+}
+
+.custom-card .ant-card-head {
+  display: flex;
+  /* justify-content: start; */
+  flex-direction: column;
+}

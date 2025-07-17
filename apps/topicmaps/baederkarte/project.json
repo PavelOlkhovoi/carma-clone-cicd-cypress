@@ -1,0 +1,63 @@
+{
+  "name": "baederkarte",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/topicmaps/baederkarte/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/topicmaps/baederkarte"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development",
+        },
+        "production": {
+          "mode": "production",
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "baederkarte:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "baederkarte:build:development",
+          "hmr": true,
+          "host": "0.0.0.0"
+        },
+        "production": {
+          "buildTarget": "baederkarte:build:production",
+          "hmr": false,
+          "host": "0.0.0.0"
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "baederkarte:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "baederkarte:build:development"
+        },
+        "production": {
+          "buildTarget": "baederkarte:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.logout {
+  color: "#303030";
+  cursor: pointer;
+}
+.logout:hover span {
+  color: red;
+  transition: all 0.3s;
+}
+/* .ant-menu-title-content {
+  color: #e0e0e0;
+} */
+.ant-menu-item {
+  margin-bottom: 100px; /* Adjust this value as needed */
+  padding-left: 15px;
+}
+
+.ant-menu-vertical .ant-menu-item {
+  height: 32px;
+}
+
+.active-menu-link {
+  color: red;
+  background-color: blue;
+}
+
+.ant-menu {
+  transition: width 0.0001s cubic-bezier(0.2, 0, 0, 1) 0s;
+}

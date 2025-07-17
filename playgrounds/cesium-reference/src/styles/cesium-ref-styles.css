@@ -1,0 +1,27 @@
+/* Cesium Reference Playground Styles */
+
+/* Panel base styling - shared across all panels */
+.panel-base {
+  background: rgba(42, 42, 42, 0.9);
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  position: fixed;
+  padding: 1rem;
+}
+
+/* Panel positioning variants */
+.panel-top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.panel-top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.panel-bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}

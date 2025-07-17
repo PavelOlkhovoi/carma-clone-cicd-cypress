@@ -1,0 +1,7 @@
+.column-transparent > td.ant-table-column-sort {
+  background-color: transparent;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: none !important;
+}

@@ -1,0 +1,61 @@
+{
+  "name": "kita-finder",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/topicmaps/kita-finder/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/topicmaps/kita-finder"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "kita-finder:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "kita-finder:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "kita-finder:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "kita-finder:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "kita-finder:build:development"
+        },
+        "production": {
+          "buildTarget": "kita-finder:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
