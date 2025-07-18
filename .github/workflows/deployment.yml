@@ -34,15 +34,16 @@ jobs:
       - name: Get affected projects
         id: affected
         run: |
-          # Fetch all history and tags
-          git fetch --prune --unshallow
-
-          # Get the base commit - either last successful commit or first commit if none exists
-          BASE_SHA=$(git rev-list --max-parents=0 HEAD)
-          LAST_COMMIT=$(git rev-parse HEAD^1 || echo $BASE_SHA)
-
-          echo "Using base commit: $LAST_COMMIT"
-          AFFECTED_PROJECTS=$(npx nx print-affected --base=$LAST_COMMIT --head=HEAD --select=projects)
+          # For push events, compare with the previous commit
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            BASE_SHA=${{ github.event.before }}
+          else
+            # For other events, use the default branch as base
+            BASE_SHA=${{ github.event.pull_request.base.sha || github.event.before }}
+          fi
+          
+          echo "Using base commit: $BASE_SHA"
+          AFFECTED_PROJECTS=$(npx nx print-affected --base=$BASE_SHA --head=${{ github.sha }} --select=projects)
           echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
 
       - name: Check for e2e tests
