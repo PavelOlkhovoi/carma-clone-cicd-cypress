@@ -33,4 +33,6 @@ jobs:
         run: npm install -g nx
 
       - name: Run e2e tests
-        run: npx nx run e2e-stadtplan:e2e --skip-nx-cache
+        run: |
+          npx nx run e2e-stadtplan:e2e --skip-nx-cache
+          npx nx run e2e-baederkarte:e2e --skip-nx-cache
