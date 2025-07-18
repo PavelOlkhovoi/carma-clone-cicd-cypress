@@ -17,10 +17,10 @@ import { Button, Modal, Spin } from "antd";
 
 import { Item } from "@carma-commons/types";
 import { extractCarmaConfig } from "@carma-commons/utils";
-import {
-  extServiceText,
-  extServiceBackgroundImage,
-} from "@carma-collab/wuppertal/geoportal";
+// import {
+//   extServiceText,
+//   extServiceBackgroundImage,
+// } from "@carma-collab/wuppertal/geoportal";
 
 import InfoCard from "./InfoCard";
 import { useAuth } from "@carma-apps/portals";
@@ -234,7 +234,7 @@ const LayerItem = ({
 
           {showWithoutThumbnail || layer.id.includes("custom") ? (
             <div style={{ height: "100%", width: "100%" }}>
-              <img
+              {/* <img
                 src={extServiceBackgroundImage}
                 alt={title}
                 loading="lazy"
@@ -245,10 +245,10 @@ const LayerItem = ({
                 onLoad={(e) => {
                   setIsLoading(false);
                 }}
-              />
+              /> */}
               <div className="absolute inset-0 flex items-start justify-center pt-[5%]">
                 <span className="text-black/40 text-2xl font-bold">
-                  {extServiceText}
+                  {/* {extServiceText} */}
                 </span>
               </div>
             </div>
