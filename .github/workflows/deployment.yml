@@ -43,22 +43,53 @@ jobs:
           fi
           
           echo "Using base commit: $BASE_SHA"
-          AFFECTED_PROJECTS=$(npx nx print-affected --base=$BASE_SHA --head=${{ github.sha }} --select=projects)
+          
+          # Try to get affected projects, fallback to all projects if it fails
+          if ! AFFECTED_PROJECTS=$(npx nx print-affected --base=$BASE_SHA --head=${{ github.sha }} --select=projects 2>/dev/null); then
+            echo "Warning: Failed to get affected projects, falling back to all projects"
+            AFFECTED_PROJECTS=$(npx nx show projects --json | jq -r '.projects | keys[]' | tr '\n' ' ')
+          fi
+          
+          # If still empty, set a default value
+          if [ -z "$AFFECTED_PROJECTS" ]; then
+            AFFECTED_PROJECTS="all"
+          fi
+          
+          echo "Affected projects: $AFFECTED_PROJECTS"
           echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
 
       - name: Check for e2e tests
         id: check_e2e
         run: |
-          AFFECTED_ARRAY=(${{ steps.affected.outputs.affected_projects }})
+          # Function to find e2e projects for a given project
+          find_e2e_project() {
+            local project=$1
+            if [ -d "e2e/e2e-$project" ]; then
+              echo "e2e-$project"
+            fi
+          }
+
           E2E_PROJECTS=()
           
-          for project in "${AFFECTED_ARRAY[@]}"
-          do
-            # Check if corresponding e2e project exists (following e2e-* pattern)
-            if [ -d "e2e/e2e-$project" ]; then
-              E2E_PROJECTS+=("e2e-$project")
-            fi
-          done
+          if [ "${{ steps.affected.outputs.affected_projects }}" = "all" ]; then
+            # If all projects, find all e2e-* directories
+            while IFS= read -r dir; do
+              if [[ -d "$dir" && $(basename "$dir") == e2e-* ]]; then
+                E2E_PROJECTS+=("$(basename "$dir")")
+              fi
+            done < <(find e2e -maxdepth 1 -type d)
+          else
+            # For specific affected projects
+            AFFECTED_ARRAY=(${{ steps.affected.outputs.affected_projects }})
+            for project in "${AFFECTED_ARRAY[@]}"; do
+              if [ ! -z "$project" ]; then
+                e2e_project=$(find_e2e_project "$project")
+                if [ ! -z "$e2e_project" ]; then
+                  E2E_PROJECTS+=("$e2e_project")
+                fi
+              fi
+            done
+          fi
           
           if [ ${#E2E_PROJECTS[@]} -gt 0 ]; then
             echo "has_e2e=true" >> $GITHUB_OUTPUT
