@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      has_e2e: ${{ steps.check_e2e.outputs.has_e2e }}
+      e2e_projects: ${{ steps.check_e2e.outputs.e2e_projects }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,17 +53,40 @@ jobs:
           
           if [ ${#E2E_PROJECTS[@]} -gt 0 ]; then
             echo "has_e2e=true" >> $GITHUB_OUTPUT
-            echo "e2e_projects=${E2E_PROJECTS[*]}" >> $GITHUB_OUTPUT
+            # Convert array to JSON array for matrix
+            JSON_ARRAY=$(printf '%s\n' "${E2E_PROJECTS[@]}" | jq -R . | jq -s .)
+            echo "e2e_projects=$JSON_ARRAY" >> $GITHUB_OUTPUT
           else
             echo "has_e2e=false" >> $GITHUB_OUTPUT
+            echo "e2e_projects=[]" >> $GITHUB_OUTPUT
           fi
 
-      - name: Run e2e tests
-        if: steps.check_e2e.outputs.has_e2e == 'true'
+  e2e-tests:
+    needs: deploy
+    if: needs.deploy.outputs.has_e2e == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.deploy.outputs.e2e_projects) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install nx globally
+        run: npm install -g nx
+
+      - name: Run e2e test
         run: |
-          IFS=' ' read -r -a E2E_ARRAY <<< "${{ steps.check_e2e.outputs.e2e_projects }}"
-          for project in "${E2E_ARRAY[@]}"
-          do
-            echo "Running e2e tests for $project"
-            npx nx run $project:e2e --skip-nx-cache
-          done
+          echo "Running e2e tests for ${{ matrix.project }}"
+          npx nx run ${{ matrix.project }}:e2e --skip-nx-cache
