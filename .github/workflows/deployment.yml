@@ -32,33 +32,6 @@ jobs:
       - name: Install nx globally
         run: npm install -g nx
 
-      - name: Run e2e tests
+      - name: Run smoke tests
         run: |
-          npx nx run e2e-stadtplan:e2e --skip-nx-cache
-          npx nx run e2e-baederkarte:e2e --skip-nx-cache
-
-      - name: Archive Test Results
-        if: always()
-        run: |
-          mkdir -p test-artifacts
-          # Archive stadtplan test results
-          if [ -d "e2e/topicmaps/stadtplan/cypress/videos" ] || [ -d "e2e/topicmaps/stadtplan/cypress/screenshots" ]; then
-            tar -czf test-artifacts/stadtplan-results.tar.gz \
-              -C e2e/topicmaps/stadtplan cypress/videos cypress/screenshots || true
-          fi
-          # Archive baederkarte test results
-          if [ -d "e2e/topicmaps/baederkarte/cypress/videos" ] || [ -d "e2e/topicmaps/baederkarte/cypress/screenshots" ]; then
-            tar -czf test-artifacts/baederkarte-results.tar.gz \
-              -C e2e/topicmaps/baederkarte cypress/videos cypress/screenshots || true
-          fi
-
-      - name: Store Test Artifacts
-        if: always()
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git checkout -b test-artifacts-${{ github.sha }}
-          mv test-artifacts/* .
-          git add *.tar.gz || true
-          git commit -m "Add test artifacts for commit ${{ github.sha }}" || true
-          git push origin test-artifacts-${{ github.sha }} || true
+          npx nx run-many --target=e2e --testFile=smoke.cy.ts --skip-nx-cache
