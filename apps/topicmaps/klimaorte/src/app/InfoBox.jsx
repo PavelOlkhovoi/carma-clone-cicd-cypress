@@ -8,7 +8,6 @@ import InfoBoxHeader from "react-cismap/topicmaps/InfoBoxHeader";
 import { appModes } from "./helper/modeParser";
 import { getColorConsideringSeondarySelection } from "./helper/styler";
 import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
-import { InfoBoxTextContent } from "@carma-collab/wuppertal/klimaorte";
 import { GenericInfoBoxFromFeature } from "@carma-apps/portals";
 
 const InfoBox = (props) => {
@@ -192,7 +191,7 @@ const InfoBox = (props) => {
           },
         },
         noCurrentFeatureTitle: "Keine Klimarouten gefunden",
-        noCurrentFeatureContent: <InfoBoxTextContent />,
+        noCurrentFeatureContent: "Keine Klimarouten gefunden",
         getTotalNumberOfItems: () => {
           return Object.values(itemsDictionary.routen).length;
         },
@@ -226,7 +225,7 @@ const InfoBox = (props) => {
           },
         },
         noCurrentFeatureTitle: "Keine Stationen gefunden",
-        noCurrentFeatureContent: <InfoBoxTextContent />,
+        noCurrentFeatureContent: "Keine Stationen gefunden",
 
         getTotalNumberOfItems: (items) => {
           if (secondarySelection?.id) {
@@ -314,7 +313,7 @@ const InfoBox = (props) => {
         },
       },
       noCurrentFeatureTitle: "Keine Klimaorte gefunden",
-      noCurrentFeatureContent: <InfoBoxTextContent />,
+      noCurrentFeatureContent: "Keine Klimaorte gefunden",
     };
   }
   return (

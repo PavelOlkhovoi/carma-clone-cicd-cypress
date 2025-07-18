@@ -33,10 +33,10 @@ import { appModes, getMode, getModeUrl } from "./helper/modeParser";
 import { getClusterIconCreatorFunction } from "react-cismap/tools/uiHelper";
 import { getColorConsideringSeondarySelection } from "./helper/styler";
 import InfoBox from "./InfoBox";
-import {
-  searchTextPlaceholder,
-  MenuTooltip,
-} from "@carma-collab/wuppertal/klimaorte";
+// import {
+//   searchTextPlaceholder,
+//   MenuTooltip,
+// } from "@carma-collab/wuppertal/klimaorte";
 import { TopicMapSelectionContent } from "@carma-apps/portals";
 import { EmptySearchComponent } from "@carma-mapping/fuzzy-search";
 import FuzzySearchWrapper from "./components/FuzzySearchWrapper";
@@ -242,7 +242,7 @@ function KlimaorteMap() {
         </Control>
         <Control position="bottomleft" order={10}>
           <div style={{ marginTop: "4px" }}>
-            <FuzzySearchWrapper searchTextPlaceholder={searchTextPlaceholder} />
+            <FuzzySearchWrapper />
           </div>
         </Control>
         <div className="mode-container-switcher">
@@ -257,7 +257,7 @@ function KlimaorteMap() {
           <TopicMapComponent
             maxZoom={19}
             minZoom={8}
-            applicationMenuTooltipString={<MenuTooltip appMode={appMode} />}
+            // applicationMenuTooltipString={<MenuTooltip appMode={appMode} />}
             locatorControl={false}
             fullScreenControl={false}
             zoomControls={false}
@@ -269,13 +269,13 @@ function KlimaorteMap() {
                 key={JSON.stringify(selectedFeature)}
                 appMode={appMode}
                 pixelwidth={400}
-                secondaryInfoBoxElements={secondaryInfoBoxElements}
+                // secondaryInfoBoxElements={secondaryInfoBoxElements}
                 moreDataAvailable={moreDataAvailable}
                 selectedFeature={selectedFeature}
                 secondarySelection={secondarySelection}
               />
             }
-            secondaryInfo={<InfoPanel />}
+            // secondaryInfo={<InfoPanel />}
           >
             <TopicMapSelectionContent />
             <FeatureCollection

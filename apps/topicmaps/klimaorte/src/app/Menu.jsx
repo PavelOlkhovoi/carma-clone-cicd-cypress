@@ -347,62 +347,62 @@ const MyMenu = () => {
     <CustomizationContextProvider>
       <ModalApplicationMenu
         menuIcon={"bars"}
-        menuTitle={<MenuTitle appMode={appMode} />}
-        menuFooter={
-          <Footer
-            version={getApplicationVersion(versionData)}
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
-        }
-        menuIntroduction={
-          <MenuIntroduction
-            appMode={appMode}
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
-        }
-        menuSections={[
-          appMode === "ORTE" ? (
-            <Section
-              key="filter"
-              sectionKey="filter"
-              sectionTitle={getFilterHeader(
-                filteredItems?.length,
-                shownFeatures?.length
-              )}
-              sectionBsStyle={FilterStyle}
-              sectionContent={
-                <>
-                  <FilterPanel filterConfiguration={filterConfiguration} />
-                  <p style={{ paddingTop: 10 }}>
-                    Die getroffene Filterung wirkt sich nur auf den Bereich{" "}
-                    <span style={{ whiteSpace: "nowrap" }}>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a className="styleaslink">
-                        <FontAwesomeIcon icon={faRandom} /> Klimaorte
-                      </a>
-                    </span>{" "}
-                    aus (nicht auf den Bereich{" "}
-                    <span style={{ whiteSpace: "nowrap" }}>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a className="styleaslink">
-                        <FontAwesomeIcon icon={faRandom} /> Klimarouten
-                      </a>
-                    </span>
-                    ).
-                  </p>
-                </>
-              }
-            />
-          ) : undefined,
-          <DefaultSettingsPanel
-            skipFilterTitleSettings={true}
-            key="settings"
-            previewMapPosition="lat=51.2559579192051&lng=7.14642942709672&zoom=13"
-            previewFeatureCollection={previewFeatureCollection}
-          />,
-          <KompaktanleitungSection />,
-          <GenericDigitalTwinReferenceSection />,
-        ]}
+        // menuTitle={<MenuTitle appMode={appMode} />}
+        // menuFooter={
+        //   <Footer
+        //     version={getApplicationVersion(versionData)}
+        //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        //   />
+        // }
+        // menuIntroduction={
+        //   <MenuIntroduction
+        //     appMode={appMode}
+        //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        //   />
+        // }
+        // menuSections={[
+        //   appMode === "ORTE" ? (
+        //     <Section
+        //       key="filter"
+        //       sectionKey="filter"
+        //       sectionTitle={getFilterHeader(
+        //         filteredItems?.length,
+        //         shownFeatures?.length
+        //       )}
+        //       sectionBsStyle={FilterStyle}
+        //       sectionContent={
+        //         <>
+        //           <FilterPanel filterConfiguration={filterConfiguration} />
+        //           <p style={{ paddingTop: 10 }}>
+        //             Die getroffene Filterung wirkt sich nur auf den Bereich{" "}
+        //             <span style={{ whiteSpace: "nowrap" }}>
+        //               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        //               <a className="styleaslink">
+        //                 <FontAwesomeIcon icon={faRandom} /> Klimaorte
+        //               </a>
+        //             </span>{" "}
+        //             aus (nicht auf den Bereich{" "}
+        //             <span style={{ whiteSpace: "nowrap" }}>
+        //               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        //               <a className="styleaslink">
+        //                 <FontAwesomeIcon icon={faRandom} /> Klimarouten
+        //               </a>
+        //             </span>
+        //             ).
+        //           </p>
+        //         </>
+        //       }
+        //     />
+        //   ) : undefined,
+        //   <DefaultSettingsPanel
+        //     skipFilterTitleSettings={true}
+        //     key="settings"
+        //     previewMapPosition="lat=51.2559579192051&lng=7.14642942709672&zoom=13"
+        //     previewFeatureCollection={previewFeatureCollection}
+        //   />,
+        //   <KompaktanleitungSection />,
+        //   <GenericDigitalTwinReferenceSection />,
+        // ]}
       />
     </CustomizationContextProvider>
   );
