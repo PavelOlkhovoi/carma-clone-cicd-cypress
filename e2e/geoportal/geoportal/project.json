@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "e2e/geoportal/geoportal/src",
   "projectType": "application",
-  "tags": ["smoke"],
+  "tags": [],
   "implicitDependencies": ["geoportal"],
   "targets": {
     "e2e": {
