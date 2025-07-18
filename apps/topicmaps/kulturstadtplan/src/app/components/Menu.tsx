@@ -6,15 +6,15 @@ import Section from "react-cismap/topicmaps/menu/Section";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import FilterUI from "./menu/FilterUI";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import {
-  MenuIntroduction,
-  MenuTitle,
-  KompaktanleitungSection,
-  Footer,
-  getFilterHeader,
-  FilterStyle,
-} from "@carma-collab/wuppertal/kulturstadtplan";
-import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
+// import {
+//   MenuIntroduction,
+//   MenuTitle,
+//   KompaktanleitungSection,
+//   Footer,
+//   getFilterHeader,
+//   FilterStyle,
+// } from "@carma-collab/wuppertal/kulturstadtplan";
+// import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
 import versionData from "../../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 
@@ -44,33 +44,33 @@ const Menu = () => {
     <CustomizationContextProvider customizations={{}}>
       <ModalApplicationMenu
         menuIcon={"bars"}
-        menuTitle={<MenuTitle />}
-        menuFooter={
-          <Footer
-            version={getApplicationVersion(versionData)}
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
-        }
-        menuIntroduction={
-          <MenuIntroduction
-            setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-          />
-        }
-        menuSections={[
-          <Section
-            key="filter"
-            sectionKey="filter"
-            sectionTitle={getFilterHeader(
-              filteredItems?.length,
-              shownFeatures?.length
-            )}
-            sectionBsStyle={FilterStyle}
-            sectionContent={<FilterUI />}
-          />,
-          <DefaultSettingsPanel key="settings" />,
-          <KompaktanleitungSection />,
-          <GenericDigitalTwinReferenceSection />,
-        ]}
+        // menuTitle={<MenuTitle />}
+        // menuFooter={
+        //   <Footer
+        //     version={getApplicationVersion(versionData)}
+        //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        //   />
+        // }
+        // menuIntroduction={
+        //   <MenuIntroduction
+        //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+        //   />
+        // }
+      //   menuSections={[
+      //     <Section
+      //       key="filter"
+      //       sectionKey="filter"
+      //       sectionTitle={getFilterHeader(
+      //         filteredItems?.length,
+      //         shownFeatures?.length
+      //       )}
+      //       sectionBsStyle={FilterStyle}
+      //       sectionContent={<FilterUI />}
+      //     />,
+      //     <DefaultSettingsPanel key="settings" />,
+      //     <KompaktanleitungSection />,
+      //     <GenericDigitalTwinReferenceSection />,
+      //   ]}
       />
     </CustomizationContextProvider>
   );

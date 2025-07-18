@@ -12,12 +12,12 @@ import {
 } from "../../helper/styler";
 import Menu from "./Menu";
 import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
-import {
-  searchTextPlaceholder,
-  MenuTooltip,
-  InfoBoxTextContent,
-  InfoBoxTextTitle,
-} from "@carma-collab/wuppertal/kulturstadtplan";
+// import {
+//   searchTextPlaceholder,
+//   MenuTooltip,
+//   InfoBoxTextContent,
+//   InfoBoxTextTitle,
+// } from "@carma-collab/wuppertal/kulturstadtplan";
 import {
   TopicMapSelectionContent,
   useSelectionTopicMap,
@@ -101,7 +101,6 @@ const Map = () => {
               pixelwidth={
                 responsiveState === "normal" ? "300px" : windowSize.width - gap
               }
-              placeholder={searchTextPlaceholder}
             />
           </div>
         </Control>
@@ -113,7 +112,7 @@ const Map = () => {
           photoLightBox
           gazetteerSearchControl={true}
           gazetteerSearchComponent={EmptySearchComponent}
-          applicationMenuTooltipString={<MenuTooltip />}
+          // applicationMenuTooltipString={<MenuTooltip />}
           infoBox={
             <GenericInfoBoxFromFeature
               pixelwidth={350}
@@ -125,13 +124,13 @@ const Map = () => {
                     plural: "POIs",
                   },
                 },
-                noFeatureTitle: <InfoBoxTextTitle />,
-                noCurrentFeatureContent: (
-                  <InfoBoxTextContent
-                    setAppMenuVisible={setAppMenuVisible}
-                    setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-                  />
-                ),
+                // noFeatureTitle: <InfoBoxTextTitle />,
+                // noCurrentFeatureContent: (
+                //   <InfoBoxTextContent
+                //     setAppMenuVisible={setAppMenuVisible}
+                //     setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
+                //   />
+                // ),
               }}
             />
           }
