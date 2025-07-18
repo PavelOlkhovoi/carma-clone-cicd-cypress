@@ -13,6 +13,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: "recursive"
+
       - name: Update Submodules
         run: git submodule update --remote --recursive
 
@@ -21,16 +22,45 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Initialize and update submodules
-        run: |
-          git submodule init
-          git submodule update --recursive --remote
-
       - name: Install Dependencies
         run: npm install
 
       - name: Install nx globally
         run: npm install -g nx
 
-      - name: Run smoke tests in topicmaps
-        run: npx nx run-many --target=e2e --projects="tag:smoke" --skip-nx-cache
+      - name: Get affected projects
+        id: affected
+        run: |
+          AFFECTED_PROJECTS=$(npx nx print-affected --base=origin/main~1 --head=HEAD --select=projects)
+          echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
+
+      - name: Check for e2e tests
+        id: check_e2e
+        run: |
+          AFFECTED_ARRAY=(${{ steps.affected.outputs.affected_projects }})
+          E2E_PROJECTS=()
+          
+          for project in "${AFFECTED_ARRAY[@]}"
+          do
+            # Check if corresponding e2e project exists (following e2e-* pattern)
+            if [ -d "e2e/e2e-$project" ]; then
+              E2E_PROJECTS+=("e2e-$project")
+            fi
+          done
+          
+          if [ ${#E2E_PROJECTS[@]} -gt 0 ]; then
+            echo "has_e2e=true" >> $GITHUB_OUTPUT
+            echo "e2e_projects=${E2E_PROJECTS[*]}" >> $GITHUB_OUTPUT
+          else
+            echo "has_e2e=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run e2e tests
+        if: steps.check_e2e.outputs.has_e2e == 'true'
+        run: |
+          IFS=' ' read -r -a E2E_ARRAY <<< "${{ steps.check_e2e.outputs.e2e_projects }}"
+          for project in "${E2E_ARRAY[@]}"
+          do
+            echo "Running e2e tests for $project"
+            npx nx run $project:e2e --skip-nx-cache
+          done
