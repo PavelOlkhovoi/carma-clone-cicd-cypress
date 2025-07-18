@@ -34,4 +34,9 @@ jobs:
 
       - name: Run smoke tests in topicmaps
         run: |
-          npx nx run-many --target=e2e --testFile=smoke.cy.ts --projects=topicmaps-* --skip-nx-cache
+          cd e2e/topicmaps && for d in */; do
+            if [ -f "${d}src/e2e/smoke.cy.ts" ]; then
+              echo "Running smoke tests in ${d}"
+              npx nx e2e "${d%/}" --testFile=src/e2e/smoke.cy.ts --skip-nx-cache
+            fi
+          done
