@@ -12,12 +12,12 @@ import {
   UIDispatchContext,
 } from "react-cismap/contexts/UIContextProvider";
 import Menu from "./Menu";
-import {
-  searchTextPlaceholder,
-  MenuTooltip,
-  InfoBoxTextTitle,
-  InfoBoxTextContent,
-} from "@carma-collab/wuppertal/x-and-ride";
+// import {
+//   searchTextPlaceholder,
+//   MenuTooltip,
+//   InfoBoxTextTitle,
+//   InfoBoxTextContent,
+// } from "@carma-collab/wuppertal/x-and-ride";
 import { TopicMapSelectionContent } from "@carma-apps/portals";
 import { EmptySearchComponent } from "@carma-mapping/fuzzy-search";
 import { Control, ControlLayout } from "@carma-mapping/map-controls-layout";
@@ -29,11 +29,10 @@ import {
 } from "@carma-mapping/components";
 import { getApplicationVersion } from "@carma-commons/utils";
 import versionData from "../../version.json";
-import SIMComponentDictionary from "@carma-collab/wuppertal/secondary-info-modals";
+// import SIMComponentDictionary from "@carma-collab/wuppertal/secondary-info-modals";
 import { TAILWIND_CLASSNAMES_FULLSCREEN_FIXED } from "@carma-commons/utils";
 import { GenericInfoBoxFromFeature } from "@carma-apps/portals";
 
-const SecondaryInfoModal = SIMComponentDictionary["xandRideSIM"];
 const Map = () => {
   const { setClusteringOptions } = useContext<
     typeof FeatureCollectionDispatchContext
@@ -90,7 +89,7 @@ const Map = () => {
           <Control position="bottomleft" order={10}>
             <div style={{ marginTop: "4px" }}>
               <FuzzySearchWrapper
-                searchTextPlaceholder={searchTextPlaceholder}
+                searchTextPlaceholder='wohin'
               />
             </div>
           </Control>
@@ -102,7 +101,6 @@ const Map = () => {
             photoLightBox
             gazetteerSearchControl={true}
             gazetteerSearchComponent={EmptySearchComponent}
-            applicationMenuTooltipString={<MenuTooltip />}
             infoBox={
               <GenericInfoBoxFromFeature
                 pixelwidth={350}
@@ -115,24 +113,10 @@ const Map = () => {
                       plural: "Anlagen",
                     },
                   },
-                  noFeatureTitle: <InfoBoxTextTitle />,
-                  noCurrentFeatureContent: (
-                    <InfoBoxTextContent
-                      setAppMenuVisible={setAppMenuVisible}
-                      setAppMenuActiveMenuSection={setAppMenuActiveMenuSection}
-                    />
-                  ),
                 }}
               />
             }
           >
-            {secondaryInfoVisible && (
-              <SecondaryInfoModal
-                feature={selectedFeature}
-                setOpen={setSecondaryInfoVisible}
-                versionString={getApplicationVersion(versionData)}
-              />
-            )}
             <TopicMapSelectionContent />
             <FeatureCollection></FeatureCollection>
           </TopicMapComponent>
