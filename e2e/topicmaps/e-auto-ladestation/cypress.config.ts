@@ -5,12 +5,26 @@ export default defineConfig({
   e2e: {
     ...nxE2EPreset(__dirname),
     screenshotsFolder: './report-cy/screenshots',
+    reporter: 'spec',
+    reporterOptions: {
+      toConsole: true,
+      output: 'minimal'
+    },
+    video: false,
+    videosFolder: './report-cy/videos',
+    screenshotOnRunFailure: true,
     pageLoadTimeout: 120000,
     baseUrl: 'http://localhost:4201',
     experimentalStudio: true,
     defaultCommandTimeout: 10000,
     setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+      on('before:browser:launch', (browser, launchOptions) => {
+        if (browser.name === 'chrome' || browser.name === 'electron') {
+          launchOptions.args = launchOptions.args || [];
+          launchOptions.args.push('--silent');
+        }
+        return launchOptions;
+      });
+    }
   },
 });
