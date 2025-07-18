@@ -34,7 +34,15 @@ jobs:
       - name: Get affected projects
         id: affected
         run: |
-          AFFECTED_PROJECTS=$(npx nx print-affected --base=origin/main~1 --head=HEAD --select=projects)
+          # Fetch all history and tags
+          git fetch --prune --unshallow
+
+          # Get the base commit - either last successful commit or first commit if none exists
+          BASE_SHA=$(git rev-list --max-parents=0 HEAD)
+          LAST_COMMIT=$(git rev-parse HEAD^1 || echo $BASE_SHA)
+
+          echo "Using base commit: $LAST_COMMIT"
+          AFFECTED_PROJECTS=$(npx nx print-affected --base=$LAST_COMMIT --head=HEAD --select=projects)
           echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
 
       - name: Check for e2e tests
