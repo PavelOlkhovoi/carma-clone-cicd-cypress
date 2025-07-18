@@ -1,58 +1,36 @@
-name: Cypress Tests
+name: Deploy to GitHub Pages
 
 on:
-  workflow_dispatch:
-    inputs:
-      browser:
-        description: 'Browser to run tests in'
-        required: true
-        default: 'chrome'
-        type: choice
-        options:
-          - chrome
-          - firefox
-          - electron
-      folder:
-        description: 'Test folder to run (smoke or experiments)'
-        required: true
-        default: 'smoke'
-        type: choice
-        options:
-          - smoke
-          - experiments
-      file:
-        description: 'Specific test file to run (e.g., header1.smoke.cy.js). Leave empty to run all tests'
-        required: false
-        type: string
+  push:
+    branches:
+      - main
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update --recursive --remote
+
       - name: Install Dependencies
         run: npm install
 
-      - name: Cypress Test
-        uses: cypress-io/github-action@v6
-        with:
-          start: npm run dev
-          wait-on: 'http://localhost:5173'
-          browser: ${{ inputs.browser }}
-          spec: ${{ inputs.file != '' && format('cypress/e2e/{0}/{1}', inputs.folder, inputs.file) || format('cypress/e2e/{0}/**/*.cy.js', inputs.folder) }}
+      - name: Install nx globally
+        run: npm install -g nx
 
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-${{ inputs.folder }}-results
-          path: |
-            cypress/videos/
-            cypress/screenshots/
-          retention-days: 30
+      - name: Run smoke tests in topicmaps
+        run: npx nx run-many --target=e2e --projects="tag:smoke" --skip-nx-cache
