@@ -5,12 +5,10 @@ import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPan
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import { getBadSVG } from "./helper/helper";
 import { getColorForProperties } from "./helper/styler";
-import {
-  KompaktanleitungSection,
-  Footer,
-  MenuIntroduction,
-} from "@carma-collab/wuppertal/baederkarte";
-import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
+const KompaktanleitungSection = () => <div></div>;
+const Footer = () => <div></div>;
+const MenuIntroduction = () => <div></div>;
+const GenericDigitalTwinReferenceSection = () => <div></div>;
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 

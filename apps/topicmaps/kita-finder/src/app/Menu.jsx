@@ -8,16 +8,8 @@ import { UIDispatchContext } from "react-cismap/contexts/UIContextProvider";
 import DefaultSettingsPanel from "react-cismap/topicmaps/menu/DefaultSettingsPanel";
 import ModalApplicationMenu from "react-cismap/topicmaps/menu/ModalApplicationMenu";
 import Section from "react-cismap/topicmaps/menu/Section";
-import { GenericDigitalTwinReferenceSection } from "@carma-collab/wuppertal/commons";
+
 import FilterUI from "./FilterUI";
-import {
-  MenuTitle,
-  MenuIntroduction,
-  KompaktanleitungSection,
-  Footer,
-  getFilterHeader,
-  FilterStyle,
-} from "@carma-collab/wuppertal/kita-finder";
 import versionData from "../version.json";
 import { getApplicationVersion } from "@carma-commons/utils";
 import { Form } from "react-bootstrap";

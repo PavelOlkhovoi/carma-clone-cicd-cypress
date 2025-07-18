@@ -8,17 +8,7 @@ import FeatureCollection from "react-cismap/FeatureCollection";
 // import GenericInfoBoxFromFeature from "react-cismap/topicmaps/GenericInfoBoxFromFeature";
 import TopicMapComponent from "react-cismap/topicmaps/TopicMapComponent";
 import Menu from "./Menu";
-import {
-  searchTextPlaceholder,
-  MenuTooltip,
-  InfoBoxTextContent,
-  InfoBoxTextTitle,
-} from "@carma-collab/wuppertal/kita-finder";
-import {
-  getClusterIconCreatorFunction,
-  getColorForProperties,
-  getFeatureStyler,
-} from "./helper/styler";
+
 // import { TopicMapContext } from "react-cismap/contexts/TopicMapContextProvider";
 
 import {
@@ -69,30 +59,6 @@ const KitaKarte = () => {
   //   }
   // }, [additionalStylingInfo]);
 
-  const featureCollectionProps = {
-    clusteringOptions: {
-      iconCreateFunction: getClusterIconCreatorFunction({
-        svgSize: 35,
-        featureRenderingOption: additionalStylingInfo.featureRenderingOption,
-      }),
-    },
-    styler: (
-      svgSize,
-      colorizer = getColorForProperties,
-      appMode,
-      secondarySelection,
-      _additionalStylingInfoWillBeOverridden
-    ) =>
-      getFeatureStyler(
-        svgSize,
-        (colorizer = getColorForProperties),
-        appMode,
-        secondarySelection,
-        {
-          featureRenderingOption: additionalStylingInfo.featureRenderingOption,
-        }
-      ),
-  };
 
   return (
     <div className={TAILWIND_CLASSNAMES_FULLSCREEN_FIXED}>
@@ -117,30 +83,27 @@ const KitaKarte = () => {
               pixelwidth={
                 responsiveState === "normal" ? "300px" : windowSize.width - gap
               }
-              placeholder={searchTextPlaceholder}
+              placeholder='wohin'
             />
           </div>
         </Control>
         <TopicMapComponent
-          modalMenu={
-            <Menu previewFeatureCollectionProps={featureCollectionProps} />
-          }
+          
           locatorControl={false}
           fullScreenControl={false}
           zoomControls={false}
           gazetteerSearchControl={true}
           gazetteerSearchComponent={EmptySearchComponent}
-          applicationMenuTooltipString={<MenuTooltip />}
           infoBox={
             <GenericInfoBoxFromFeature
               pixelwidth={350}
               infoStyle={{ marginLeft: "3px" }}
-              headerColorizer={(feature, featureRenderingOption) => {
-                return getColorForProperties(
-                  feature?.properties,
-                  featureRenderingOption
-                );
-              }}
+              // headerColorizer={(feature, featureRenderingOption) => {
+              //   return getColorForProperties(
+              //     feature?.properties,
+              //     featureRenderingOption
+              //   );
+              // }}
               config={{
                 displaySecondaryInfoAction: false,
                 city: "Wuppertal",
@@ -151,8 +114,8 @@ const KitaKarte = () => {
                     plural: "Kitas",
                   },
                 },
-                noFeatureTitle: <InfoBoxTextTitle />,
-                noCurrentFeatureContent: <InfoBoxTextContent />,
+                noFeatureTitle: <div></div>
+,                noCurrentFeatureContent: <div></div>,
               }}
             />
           }
@@ -160,7 +123,6 @@ const KitaKarte = () => {
           <TopicMapSelectionContent />
           <FeatureCollection
             key={`feature_${additionalStylingInfo.featureRenderingOption}`}
-            {...featureCollectionProps}
           ></FeatureCollection>
         </TopicMapComponent>
       </ControlLayout>

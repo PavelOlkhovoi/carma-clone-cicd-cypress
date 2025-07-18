@@ -30,11 +30,10 @@ import {
 import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
 import { getApplicationVersion } from "@carma-commons/utils";
 import versionData from "../version.json";
-import SIMComponentDictionary from "@carma-collab/wuppertal/secondary-info-modals";
+
 import { TAILWIND_CLASSNAMES_FULLSCREEN_FIXED } from "@carma-commons/utils";
 import { GenericInfoBoxFromFeature } from "@carma-apps/portals";
 
-const SecondaryInfoModal = SIMComponentDictionary["eMobSIM"];
 
 const EMobiKarte = () => {
   const { setClusteringOptions, setFilterState } = useContext(
@@ -141,13 +140,7 @@ const EMobiKarte = () => {
           <TopicMapSelectionContent />
 
           <FeatureCollection></FeatureCollection>
-          {secondaryInfoVisible && (
-            <SecondaryInfoModal
-              feature={selectedFeature}
-              setOpen={setSecondaryInfoVisible}
-              versionString={getApplicationVersion(versionData)}
-            />
-          )}
+
         </TopicMapComponent>
       </ControlLayout>
     </div>
