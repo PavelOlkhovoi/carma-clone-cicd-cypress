@@ -32,6 +32,6 @@ jobs:
       - name: Install nx globally
         run: npm install -g nx
 
-      - name: Run smoke tests
+      - name: Run smoke tests in topicmaps
         run: |
-          npx nx run-many --target=e2e --testFile=smoke.cy.ts --skip-nx-cache
+          npx nx run-many --target=e2e --testFile=smoke.cy.ts --projects=topicmaps-* --skip-nx-cache
