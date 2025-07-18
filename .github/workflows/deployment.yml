@@ -47,7 +47,7 @@ jobs:
           # Try to get affected projects, fallback to all projects if it fails
           if ! AFFECTED_PROJECTS=$(npx nx print-affected --base=$BASE_SHA --head=${{ github.sha }} --select=projects 2>/dev/null); then
             echo "Warning: Failed to get affected projects, falling back to all projects"
-            AFFECTED_PROJECTS=$(npx nx show projects --json | jq -r '.projects | keys[]' | tr '\n' ' ')
+            AFFECTED_PROJECTS=$(npx nx show projects | grep -v 'Workspace projects:' | tr '\n' ' ')
           fi
           
           # If still empty, set a default value
@@ -63,7 +63,9 @@ jobs:
         run: |
           # Function to find e2e projects for a given project
           find_e2e_project() {
-            local project=$1
+            local project="$1"
+            # Remove any leading/trailing whitespace and quotes
+            project="$(echo "$project" | sed 's/^[[:space:]"]*//;s/[[:space:]"]*$//')"
             if [ -d "e2e/e2e-$project" ]; then
               echo "e2e-$project"
             fi
@@ -79,8 +81,9 @@ jobs:
               fi
             done < <(find e2e -maxdepth 1 -type d)
           else
-            # For specific affected projects
-            AFFECTED_ARRAY=(${{ steps.affected.outputs.affected_projects }})
+            # Read affected projects into array, handling spaces correctly
+            readarray -t AFFECTED_ARRAY <<< "$(echo "${{ steps.affected.outputs.affected_projects }}" | tr ' ' '\n')"
+            
             for project in "${AFFECTED_ARRAY[@]}"; do
               if [ ! -z "$project" ]; then
                 e2e_project=$(find_e2e_project "$project")
