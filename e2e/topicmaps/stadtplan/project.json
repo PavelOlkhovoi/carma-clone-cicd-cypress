@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "e2e/topicmaps/stadtplan/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["smoke"],
   "implicitDependencies": ["stadtplan"],
   "targets": {
     "e2e": {
@@ -22,5 +22,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  }
+  } 
 }
