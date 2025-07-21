@@ -134,7 +134,7 @@ jobs:
         run: |
           echo "The project list is |${{ steps.set_up_matrix.outputs.project_list }}|"
           echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
-  build:
+  e2e:
     needs: determine_projects
     runs-on: ubuntu-latest
     if: ${{ needs.determine_projects.outputs.is_affected == 'true' && (github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '' && needs.determine_projects.outputs.project_list != '[]' }}
@@ -148,8 +148,6 @@ jobs:
         project: ${{ fromJson(needs.determine_projects.outputs.project_list) }}
 
     steps:
-      # The steps for building and deploying the projects
-      # using the same matrix logic for each project...
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -161,10 +159,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project ${{ matrix.project }}
+      - name: E2E project ${{ matrix.project }}
         shell: bash 
         run: |
-          echo "🚧 Building project: ${{ matrix.project }}"
+          echo "🚧 E2E project: ${{ matrix.project }}"
           # —or, if you want to actually kick off the build— uncomment:
           # npx nx run ${{ matrix.project }}:build \
     #   --configuration=production \
