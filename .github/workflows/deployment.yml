@@ -165,4 +165,13 @@ jobs:
           # —or, if you want to actually kick off the build— uncomment:
           # npx nx run ${{ matrix.project }}:build \
     #   --configuration=production \
-    #   --base="${{ env.BASE_URL }}"  
+    #   --base="${{ env.BASE_URL }}"
+
+      - name: Run smoke E2E test for ${{ matrix.project }}
+        shell: bash
+        run: |
+          # compute the e2e‐project name by prefixing "e2e-"
+          e2e_project="e2e-${{ matrix.project }}"
+
+          echo "🧪 Running smoke E2E for project: $e2e_project"
+          npx nx run $e2e_project:e2e --spec="**/smoke.cy.ts"  
