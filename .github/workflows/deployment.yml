@@ -12,12 +12,13 @@ jobs:
       has_e2e: ${{ steps.check_e2e.outputs.has_e2e }}
       e2e_projects: ${{ steps.check_e2e.outputs.e2e_projects }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: "recursive"
+          submodules: recursive
 
-      - name: Update Submodules
+      - name: Update submodules
         run: git submodule update --remote --recursive
 
       - name: Setup Node.js
@@ -25,96 +26,44 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Install nx globally
+      - name: Install Nx globally
         run: npm install -g nx
 
       - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
+        shell: bash
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      - name: Derive appropriate SHAs for base and head for `nx affected`
         id: setSHAs
         uses: nrwl/nx-set-shas@v4
         with:
           main-branch-name: ${{ steps.extract_branch.outputs.branch }}
 
-      - run: |
+      - name: Print SHAs
+        run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
-     
-          # Function to find e2e projects for a given project
-          find_e2e_project() {
-            local project="$1"
-            # Remove any leading/trailing whitespace and quotes
-            project="$(echo "$project" | sed 's/^[[:space:]"]*//;s/[[:space:]"]*$//')"
-            if [ -d "e2e/e2e-$project" ]; then
-              echo "e2e-$project"
-            fi
-          }
 
-          E2E_PROJECTS=()
-          
-          if [ "${{ steps.affected.outputs.affected_projects }}" = "all" ]; then
-            # If all projects, find all e2e-* directories
-            while IFS= read -r dir; do
-              if [[ -d "$dir" && $(basename "$dir") == e2e-* ]]; then
-                E2E_PROJECTS+=("$(basename "$dir")")
-              fi
-            done < <(find e2e -maxdepth 1 -type d)
-          else
-            # Read affected projects into array, handling spaces correctly
-            readarray -t AFFECTED_ARRAY <<< "$(echo "${{ steps.affected.outputs.affected_projects }}" | tr ' ' '\n')"
-            
-            for project in "${AFFECTED_ARRAY[@]}"; do
-              if [ ! -z "$project" ]; then
-                e2e_project=$(find_e2e_project "$project")
-                if [ ! -z "$e2e_project" ]; then
-                  E2E_PROJECTS+=("$e2e_project")
-                fi
-              fi
-            done
-          fi
-          
-          if [ ${#E2E_PROJECTS[@]} -gt 0 ]; then
+      - name: Check for E2E changes
+        id: check_e2e
+        shell: bash
+        run: |
+          # List all affected e2e projects between base and head
+          projects=$(npx nx show projects --affected --target=e2e \
+            --base=${{ steps.setSHAs.outputs.base }} \
+            --head=${{ steps.setSHAs.outputs.head }})
+
+          if [ -n "$projects" ]; then
             echo "has_e2e=true" >> $GITHUB_OUTPUT
-            # Convert array to JSON array for matrix
-            JSON_ARRAY=$(printf '%s\n' "${E2E_PROJECTS[@]}" | jq -R . | jq -s .)
-            echo "e2e_projects=$JSON_ARRAY" >> $GITHUB_OUTPUT
+            # normalize whitespace into a comma-separated JSON array
+            arr=$(echo $projects | tr ' ' ',' | sed 's/^/[\"/; s/$/\"]/; s/,/\",\"/g')
+            echo "e2e_projects=$arr" >> $GITHUB_OUTPUT
           else
             echo "has_e2e=false" >> $GITHUB_OUTPUT
             echo "e2e_projects=[]" >> $GITHUB_OUTPUT
           fi
-
-  # e2e-tests:
-  #   needs: deploy
-  #   if: needs.deploy.outputs.has_e2e == 'true'
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       project: ${{ fromJson(needs.deploy.outputs.e2e_projects) }}
-  #     fail-fast: false
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
-  #         submodules: "recursive"
-
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '18'
-
-  #     - name: Install Dependencies
-  #       run: npm install
-
-  #     - name: Install nx globally
-  #       run: npm install -g nx
-
-  #     - name: Run e2e test
-  #       run: |
-  #         echo "Running e2e tests for ${{ matrix.project }}"
-  #         npx nx run ${{ matrix.project }}:e2e --skip-nx-cache
