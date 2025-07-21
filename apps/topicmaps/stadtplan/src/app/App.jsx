@@ -27,7 +27,6 @@ if (typeof global === "undefined") {
 function App() {
   const [poiColors, setPoiColors] = useState();
   const { progress, showProgress, handleProgressUpdate } = useProgress();
-  console.log('xxx ', poiColors)
   useEffect(() => {
     getPOIColors(setPoiColors);
     document.title = "Online-Stadtplan Wuppertal";
