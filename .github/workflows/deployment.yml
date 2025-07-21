@@ -59,7 +59,17 @@ jobs:
         run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
+          
 
+      - name: Load deployment configuration
+        id: load_config
+        run: |
+          echo "load_config Projects in deployment" 
+          config=$(cat deployment-config.json)
+          project_keys=$(echo "$config" | jq -r '.projects | keys | map(@json) | @json')
+          echo "project_keys=$project_keys" >> $GITHUB_ENV
+          echo "Projects in deployment configuration: $project_keys"  # Debug output
+          echo "::set-output name=deployment_projects::$project_keys"
 
       - name: Run nx command to show affected projects
         id: list_affected_projects
@@ -70,10 +80,57 @@ jobs:
           echo "::set-output name=project_list::$projects"
           echo "project_list=$projects" >> $GITHUB_OUTPUT
       
-      - name: Print each affected project
+      - name: Set up matrix
         if: steps.list_affected_projects.outputs.project_list != ''
+        id: set_up_matrix
         run: |
-          for project in ${{ steps.list_affected_projects.outputs.project_list }}; do
-            echo "🔍 About to e2e-test project: $project"
+          # Convert the string into an array by splitting on spaces
+          #IFS=' ' read -r -a project_array <<< "${{ steps.list_affected_projects.outputs.project_list }}"
+
+          projects=$(echo "${{ steps.list_affected_projects.outputs.project_list }}")
+          deployments=$(echo "${{ steps.load_config.outputs.deployment_projects }}"  | jq -r '.[]' | tr '\n' ' ')
+
+          # Convert the string into arrays by splitting on spaces
+          IFS=' ' read -r -a project_array <<< "$projects"
+          IFS=' ' read -r -a deployment_array <<< "$deployments"
+
+          # Declare an empty array to store the common elements
+          result_array=()
+
+
+
+          # Print the content of deployment_array for debugging
+          # echo "Deployment String: $deployments"
+          # echo "Deployment array content: ${deployment_array[@]}"
+          #echo "project_array content: ${project_array[@]}"
+
+          # Declare an empty array to store the common elements
+          result_array=()
+
+          # Iterate over each element in project_array
+          for project in "${project_array[@]}"; do
+              # Check if the project exists in deployment_array
+              if [[ " ${deployment_array[@]} " =~ " ${project} " ]]; then
+                  # If it exists, add it to the result_array
+                  result_array+=("$project")
+              fi
           done
-        shell: bash
+
+          # Construct the JSON string manually
+          result_json="["
+          for ((i=0; i<${#result_array[@]}; i++)); do
+              if [[ $i -ne 0 ]]; then
+                  result_json="$result_json, "
+              fi
+              result_json="$result_json\"${result_array[i]}\""
+          done
+          result_json="$result_json]"
+
+          # Print the result JSON
+          # echo "$result_json"
+          echo "::set-output name=project_list::$result_json"
+          echo "PROJECT_LIST=${result_json}" >> $GITHUB_ENV
+      - name: Show project list
+        run: |
+          echo "The project list is |${{ steps.set_up_matrix.outputs.project_list }}|"
+          echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
