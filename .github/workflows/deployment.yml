@@ -15,8 +15,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     outputs:
-      has_e2e:    ${{ steps.check_e2e.outputs.has_e2e }}
-      e2e_projects: ${{ steps.check_e2e.outputs.e2e_projects }}
+      project_list: ${{ steps.set_up_matrix.outputs.project_list }}
+      is_affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}
 
     steps:
       - name: Checkout repository
