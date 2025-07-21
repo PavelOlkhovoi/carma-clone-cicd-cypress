@@ -12,7 +12,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  determine_projects:
     runs-on: ubuntu-latest
     outputs:
       project_list: ${{ steps.set_up_matrix.outputs.project_list }}
