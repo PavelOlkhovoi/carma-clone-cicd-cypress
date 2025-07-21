@@ -158,6 +158,9 @@ jobs:
       - name: Update Submodules
         run: git submodule update --remote --recursive
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build project ${{ matrix.project }}
         shell: bash 
         run: |
