@@ -1,5 +1,11 @@
 name: Deploy to GitHub Pages
 
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+
 on:
   push:
     branches:
@@ -9,8 +15,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     outputs:
-      has_e2e: ${{ steps.check_e2e.outputs.has_e2e }}
+      has_e2e:    ${{ steps.check_e2e.outputs.has_e2e }}
       e2e_projects: ${{ steps.check_e2e.outputs.e2e_projects }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -60,10 +67,10 @@ jobs:
 
           if [ -n "$projects" ]; then
             echo "has_e2e=true" >> $GITHUB_OUTPUT
-            # normalize whitespace into a comma-separated JSON array
+            # Normalize into a JSON array: ["proj1","proj2",…]
             arr=$(echo $projects | tr ' ' ',' | sed 's/^/[\"/; s/$/\"]/; s/,/\",\"/g')
             echo "e2e_projects=$arr" >> $GITHUB_OUTPUT
           else
-            echo "has_e2e=false" >> $GITHUB_OUTPUT
+            echo "has_e2e=false"  >> $GITHUB_OUTPUT
             echo "e2e_projects=[]" >> $GITHUB_OUTPUT
           fi
