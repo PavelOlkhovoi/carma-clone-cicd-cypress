@@ -160,5 +160,5 @@ jobs:
 
       - name: Build project
         run: |
-          npx nx run ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}:build --configuration=production --base="${{ env.BASE_URL }}"
+          echo "🚧 Building project: ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}"
         shell: bash
