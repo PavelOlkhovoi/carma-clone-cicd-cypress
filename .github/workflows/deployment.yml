@@ -69,3 +69,11 @@ jobs:
           echo "Affected projects: $projects"
           echo "::set-output name=project_list::$projects"
           echo "project_list=$projects" >> $GITHUB_OUTPUT
+      
+      - name: Print each affected project
+        if: steps.list_affected_projects.outputs.project_list != ''
+        run: |
+          for project in ${{ steps.list_affected_projects.outputs.project_list }}; do
+            echo "🔍 About to e2e-test project: $project"
+          done
+        shell: bash
