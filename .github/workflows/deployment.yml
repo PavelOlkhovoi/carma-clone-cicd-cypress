@@ -134,3 +134,26 @@ jobs:
         run: |
           echo "The project list is |${{ steps.set_up_matrix.outputs.project_list }}|"
           echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
+  build:
+    needs: determine_projects
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && (github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '' && needs.determine_projects.outputs.project_list != '[]' }}
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine_projects.outputs.project_list) }}
+
+    steps:
+      # The steps for building and deploying the projects
+      # using the same matrix logic for each project...
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
