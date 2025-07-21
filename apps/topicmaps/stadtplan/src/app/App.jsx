@@ -11,7 +11,6 @@ import {
   getFeatureStyler,
   getPoiClusterIconCreatorFunction,
 } from "./helper/styler";
-import { ProgressBar } from "react-bootstrap";
 import titleFactory from "./helper/titleFactory";
 import Stadtplankarte from "./Stadtplankarte";
 import "./index.css";
@@ -28,7 +27,6 @@ if (typeof global === "undefined") {
 function App() {
   const [poiColors, setPoiColors] = useState();
   const { progress, showProgress, handleProgressUpdate } = useProgress();
-console.log("xxx", poiColors)
   useEffect(() => {
     getPOIColors(setPoiColors);
     document.title = "Online-Stadtplan Wuppertal";
