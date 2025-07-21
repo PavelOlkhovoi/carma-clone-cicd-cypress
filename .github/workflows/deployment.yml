@@ -157,6 +157,8 @@ jobs:
           submodules: "recursive"
       - name: Update Submodules
         run: git submodule update --remote --recursive
-      
-      - name: Print project name
-        run: echo "🚧 Building project: ${{ matrix.project }}"
+
+      - name: Build project
+        run: |
+          npx nx run ${{ github.event.inputs['project-name'] || github.event.client_payload['project-name'] }}:build --configuration=production --base="${{ env.BASE_URL }}"
+        shell: bash
