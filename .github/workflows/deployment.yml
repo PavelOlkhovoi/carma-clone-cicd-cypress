@@ -157,3 +157,6 @@ jobs:
           submodules: "recursive"
       - name: Update Submodules
         run: git submodule update --remote --recursive
+      
+      - name: Print project name
+        run: echo "🚧 Building project: ${{ matrix.project }}"
