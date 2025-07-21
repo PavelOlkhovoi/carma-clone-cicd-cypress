@@ -39,6 +39,10 @@ jobs:
       - name: Install Nx globally
         run: npm install -g nx
 
+      - name: Set Directory as Safe
+        run: |
+          git config --local --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Extract branch name
         id: extract_branch
         shell: bash
@@ -56,21 +60,12 @@ jobs:
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
 
-      - name: Check for E2E changes
-        id: check_e2e
-        shell: bash
-        run: |
-          # List all affected e2e projects between base and head
-          projects=$(npx nx show projects --affected --target=e2e \
-            --base=${{ steps.setSHAs.outputs.base }} \
-            --head=${{ steps.setSHAs.outputs.head }})
 
-          if [ -n "$projects" ]; then
-            echo "has_e2e=true" >> $GITHUB_OUTPUT
-            # Normalize into a JSON array: ["proj1","proj2",…]
-            arr=$(echo $projects | tr ' ' ',' | sed 's/^/[\"/; s/$/\"]/; s/,/\",\"/g')
-            echo "e2e_projects=$arr" >> $GITHUB_OUTPUT
-          else
-            echo "has_e2e=false"  >> $GITHUB_OUTPUT
-            echo "e2e_projects=[]" >> $GITHUB_OUTPUT
-          fi
+      - name: Run nx command to show affected projects
+        id: list_affected_projects
+        run: |
+          projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
+          projects=$(echo $projects | tr '\n' ' ')
+          echo "Affected projects: $projects"
+          echo "::set-output name=project_list::$projects"
+          echo "project_list=$projects" >> $GITHUB_OUTPUT
