@@ -159,14 +159,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: E2E project ${{ matrix.project }}
-        shell: bash 
+      - name: List all projects with an E2E target
+        id: list_all_e2e_projects
+        shell: bash
         run: |
-          echo "🚧 E2E project: ${{ matrix.project }}"
-          # —or, if you want to actually kick off the build— uncomment:
-          # npx nx run ${{ matrix.project }}:build \
-    #   --configuration=production \
-    #   --base="${{ env.BASE_URL }}"
+          echo "🔍 Listing all projects that declare an e2e target…"
+          raw=$(npx nx show projects --with-target=e2e)
+          echo "Raw E2E-capable projects (one per line):"
+          echo "$raw"
+          
+          # Normalize newlines to spaces
+          normalized=$(echo "$raw" | tr '\n' ' ')
+          echo
+          echo "Normalized E2E list: →$normalized←"
+
+          # Export for later steps
+          echo "e2e_all_projects=$normalized" >> $GITHUB_OUTPUT
+
+      - name: Debug: show captured E2E-capable list
+        run: echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
       - name: Run smoke E2E test for ${{ matrix.project }}
         shell: bash
