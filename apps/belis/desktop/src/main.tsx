@@ -19,7 +19,6 @@ const NavBarWrapper = () => {
   const dispatch = useDispatch();
   const jwt = useSelector(getJWT);
   const [isLoading, setIsLoading] = useState(false);
-console.log('xxx ')
   useEffect(() => {
     setIsLoading(true);
     dispatch(checkJWTValidation() as unknown as UnknownAction);

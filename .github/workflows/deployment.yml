@@ -181,21 +181,13 @@ jobs:
         run: |
           echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
-      # - name: Run smoke E2E test for ${{ matrix.project }}
-      #   shell: bash
-      #   run: |
-      #     # compute the e2e‐project name by prefixing "e2e-"
-      #     e2e_project="e2e-${{ matrix.project }}"
-
-      #     echo "🧪 Running smoke E2E for project: $e2e_project"
-      #     npx nx run $e2e_project:e2e --spec="**/smoke.cy.ts"  
       - name: Run smoke E2E test for ${{ matrix.project }}
         if: ${{ contains(
              steps.list_all_e2e_projects.outputs.e2e_all_projects,
-             join(['e2e-', matrix.project], '')
+             format('e2e-{0}', matrix.project)
            ) }}
         shell: bash
         run: |
-          e2e_proj="e2e-${{ matrix.project }}"
-          echo "🧪 Running smoke E2E for project: $e2e_proj"
-          npx nx run $e2e_proj:e2e --spec="**/smoke.cy.ts"
+    e2e_proj="e2e-${{ matrix.project }}"
+    echo "🧪 Running smoke E2E for project: $e2e_proj"
+    npx nx run $e2e_proj:e2e --spec="**/smoke.cy.ts"
