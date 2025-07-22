@@ -15,6 +15,7 @@ declare global {
   }
 }
 const persistor = persistStore(store);
+
 suppressReactCismapErrors();
 window.CESIUM_BASE_URL = CESIUM_CONFIG.baseUrl;
 console.debug("RENDER: [GEOPORTAL] ROOT");
