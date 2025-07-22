@@ -183,23 +183,22 @@ jobs:
 
       - name: Run smoke E2E test for ${{ matrix.project }}
         shell: bash
-        run: | 
+        run: |
           e2e_proj="e2e-${{ matrix.project }}"
           echo "🧪 Running smoke E2E for project: $e2e_proj"
-          npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" \
-          && echo "✅ Smoke E2E passed for $e2e_proj" \
-          || {
-            # Upload the screenshot directory for this project
+          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts"; then
+            # Copy any generated Cypress screenshots into a temp folder
             mkdir -p artifacts/screenshots/$e2e_proj
-            cp cypress/screenshots/$e2e_proj/smoke.cy.ts/*.png artifacts/screenshots/$e2e_proj/
-
-            echo "::error file=cypress/screenshots/$e2e_proj/smoke.cy.ts::Smoke E2E FAILED for project $e2e_proj — screenshot(s) uploaded as artifact 'screenshots/$e2e_proj'" 
+            cp cypress/screenshots/$e2e_proj/smoke.cy.ts/*.png artifacts/screenshots/$e2e_proj/ || true
+            
+            # Emit an annotation so you see the failure immediately
+            echo "::error file=cypress/screenshots/$e2e_proj/smoke.cy.ts::Smoke E2E FAILED for project $e2e_proj"
             exit 1
-          }
+          fi
 
       - name: Upload E2E screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-screenshots-${{ matrix.project }}
           path: artifacts/screenshots/${{ matrix.project }}
