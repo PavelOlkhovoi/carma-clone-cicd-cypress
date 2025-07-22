@@ -195,7 +195,7 @@ jobs:
              join(['e2e-', matrix.project], '')
            ) }}
         shell: bash
-    run: |
-      e2e_proj="e2e-${{ matrix.project }}"
-      echo "🧪 Running smoke E2E for project: $e2e_proj"
-      npx nx run $e2e_proj:e2e --spec="**/smoke.cy.ts"
+        run: |
+          e2e_proj="e2e-${{ matrix.project }}"
+          echo "🧪 Running smoke E2E for project: $e2e_proj"
+          npx nx run $e2e_proj:e2e --spec="**/smoke.cy.ts"
