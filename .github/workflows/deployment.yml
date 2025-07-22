@@ -176,7 +176,7 @@ jobs:
           # Export for later steps
           echo "e2e_all_projects=$normalized" >> $GITHUB_OUTPUT
 
-      - name: Debug: show captured E2E-capable list
+      - name: Debug show captured E2E-capable list
         run: echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
       - name: Run smoke E2E test for ${{ matrix.project }}
