@@ -32,6 +32,7 @@ function App() {
     document.title = "Online-Stadtplan Wuppertal";
   }, []);
   if (poiColors) {
+    console.log('xxx ')
     return (
       <TopicMapContextProvider
         appKey="OnlineStadtplanWuppertal2022"
