@@ -167,28 +167,6 @@ jobs:
           # npx nx run ${{ matrix.project }}:build \
     #   --configuration=production \
     #   --base="${{ env.BASE_URL }}"
-      - name: List all projects that have an E2E target
-        id: list_e2e_projects
-        shell: bash
-        run: |
-          echo "🔍 Running: npx nx show projects --with-target=e2e"
-          raw=$(npx nx show projects --with-target=e2e)
-          echo "Raw output (newline-separated):"
-          echo "$raw" | sed 's/^/  › /'
-
-          # Turn it into a single line
-          projects=$(echo "$raw" | tr '\n' ' ')
-          echo
-          echo "Normalized (space-separated): →$projects←"
-
-          # Export as a step output
-          echo "e2e_project_list=$projects" >> $GITHUB_OUTPUT
-
-      - name: Debug: show captured E2E-list output
-        shell: bash
-        run: |
-          echo "From step output: ${{ steps.list_e2e_projects.outputs.e2e_project_list }}"
-
 
       - name: Run smoke E2E test for ${{ matrix.project }}
         shell: bash
