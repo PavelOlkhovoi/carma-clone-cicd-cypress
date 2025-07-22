@@ -182,12 +182,16 @@ jobs:
           echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
       - name: Run smoke E2E test for ${{ matrix.project }}
-        if: ${{ contains(
-             steps.list_all_e2e_projects.outputs.e2e_all_projects,
-             format('e2e-{0}', matrix.project)
-           ) }}
+        if: ${{ contains( steps.list_all_e2e_projects.outputs.e2e_all_projects, format('e2e-{0}', matrix.project) ) }}
         shell: bash
         run: |
           e2e_proj="e2e-${{ matrix.project }}"
+
           echo "🧪 Running smoke E2E for project: $e2e_proj"
-          npx nx run $e2e_proj:e2e --spec="**/smoke.cy.ts"
+          npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" \
+            && echo "✅ Smoke E2E passed for $e2e_proj" \
+            || {
+              # emit a real error‐annotation on failure
+              echo "::error file=./apps/$e2e_proj:e2e.spec.ts::Smoke E2E FAILED for project $e2e_proj"
+              exit 1
+            }
