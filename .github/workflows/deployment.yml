@@ -185,9 +185,9 @@ jobs:
           echo "e2e_project_list=$projects" >> $GITHUB_OUTPUT
 
       - name: Debug: show captured E2E-list output
+        shell: bash
         run: |
           echo "From step output: ${{ steps.list_e2e_projects.outputs.e2e_project_list }}"
-        shell: bash
 
 
       - name: Run smoke E2E test for ${{ matrix.project }}
