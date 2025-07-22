@@ -36,6 +36,7 @@ const KitaKarte = () => {
     ResponsiveTopicMapContext
   );
   useSelectionTopicMap();
+  console.log('xxx ')
 
   // const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
   //   FeatureCollectionDispatchContext
