@@ -5,7 +5,6 @@ import { Divider, Skeleton, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { CustomCard } from "./components/CustomCard";
 import "./alkis.css";
-
 export function AlkisRenderer({ landparcelId, jwt }: AlkisRendererProps) {
   const [resHtml, setResHtml] = useState<React.ReactNode>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +24,6 @@ export function AlkisRenderer({ landparcelId, jwt }: AlkisRendererProps) {
       onLandparcelSearch(jwt, landparcelId);
     }
   }, [jwt, landparcelId]);
-
   return (
     <div>
       <div className="flex flex-col items-center relative h-full max-h-[calc(100vh-43px)]">
