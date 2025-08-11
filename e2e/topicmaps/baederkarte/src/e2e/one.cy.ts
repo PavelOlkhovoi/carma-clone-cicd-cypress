@@ -1,4 +1,4 @@
-describe("baederkarte smoke test", () => {
+describe("baederkarte one test", () => {
   beforeEach(() => cy.visit("/"));
 
   it("map loads with key controls", () => {

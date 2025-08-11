@@ -1,4 +1,4 @@
-describe("e-bikes smoke test", () => {
+describe("e-bikes one test", () => {
   beforeEach(() => cy.visit("/"));
 
   it("map loads with key controls", () => {

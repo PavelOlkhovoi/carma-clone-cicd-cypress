@@ -1,4 +1,4 @@
-describe("klimaorte one test", () => {
+describe("klimaorte smoke test", () => {
   beforeEach(() => cy.visit("/"));
 
   it("map loads with key controls", () => {
