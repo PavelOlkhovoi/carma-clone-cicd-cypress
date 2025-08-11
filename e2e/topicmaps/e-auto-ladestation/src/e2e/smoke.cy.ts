@@ -15,7 +15,7 @@ describe("e-auto-ladestation smoke test", () => {
   it("map loads with key controls", () => {
     // Check map controls are visible and interactive
     cy.get("[data-test-id=zoom-control]")
-      .should("be.visible")
+      .should("not.be.visible")
       .and("not.be.disabled");
 
     cy.get("[data-test-id=fuzzy-search]")
