@@ -60,7 +60,6 @@ function App() {
           ...filters,
         }}
         additionalStylingInfo={{ featureRenderingOption }}
-        // getColorFromProperties={getColorForProperties}
         featureTooltipFunction={(feature) => feature?.properties?.kurzname}
         convertItemToFeatureProgressCallback={handleProgressUpdate}
         backgroundConfigurations={backgroundConfWithFastOrtho2024}
