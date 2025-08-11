@@ -189,10 +189,25 @@ jobs:
           if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts"; then
             # Copy any generated Cypress screenshots into a temp folder
             mkdir -p artifacts/screenshots/$e2e_proj
-            cp cypress/screenshots/$e2e_proj/smoke.cy.ts/*.png artifacts/screenshots/$e2e_proj/ || true
+
+            # Determine the Nx project root to locate screenshots reliably
+            root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
+            echo "Resolved $e2e_proj root: $root_dir"
+
+            # Copy from the default Cypress screenshots folder if present
+            if [ -d "$root_dir/cypress/screenshots" ]; then
+              echo "Copying from $root_dir/cypress/screenshots"
+              cp -r "$root_dir/cypress/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
+            fi
+
+            # Copy from report-cy/screenshots (used by some projects)
+            if [ -d "$root_dir/report-cy/screenshots" ]; then
+              echo "Copying from $root_dir/report-cy/screenshots"
+              cp -r "$root_dir/report-cy/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
+            fi
             
             # Emit an annotation so you see the failure immediately
-            echo "::error file=cypress/screenshots/$e2e_proj/smoke.cy.ts::Smoke E2E FAILED for project $e2e_proj"
+            echo "::error::Smoke E2E FAILED for project $e2e_proj"
             exit 1
           fi
 
@@ -201,4 +216,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: e2e-screenshots-${{ matrix.project }}
-          path: artifacts/screenshots/${{ matrix.project }}
+          path: artifacts/screenshots/e2e-${{ matrix.project }}
