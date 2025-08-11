@@ -1,0 +1,29 @@
+{
+  "name": "e2e-lagis-desktop",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/lagis/lagis-desktop/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["lagis-desktop"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "e2e/lagis/lagis-desktop/cypress.config.ts",
+        "devServerTarget": "lagis-desktop:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "lagis-desktop:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "lagis-desktop:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
