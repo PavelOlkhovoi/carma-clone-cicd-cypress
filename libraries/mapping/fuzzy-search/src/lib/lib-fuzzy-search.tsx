@@ -10,7 +10,6 @@ import IconComp from "react-cismap/commons/Icon";
 import {
   generateOptions,
   limitSearchResult,
-  mapDataToSearchResult,
   prepareGazData,
   removeStopwords,
   getDefaultSearchConfig,
