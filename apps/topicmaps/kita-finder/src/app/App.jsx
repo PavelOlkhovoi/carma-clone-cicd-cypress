@@ -45,7 +45,6 @@ function App() {
           import.meta.env.VITE_WUPP_ASSET_BASEURL + "/data/kitas.data.json"
         }
         createFeatureItemsDictionary={createItemsDictionary}
-        // getFeatureStyler={getFeatureStyler}
         convertItemToFeature={convertItemToFeature}
         itemFilterFunction={itemFilterFunction}
         titleFactory={titleFactory}
