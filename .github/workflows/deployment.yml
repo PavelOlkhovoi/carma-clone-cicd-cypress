@@ -186,6 +186,13 @@ jobs:
         run: |
           e2e_proj="e2e-${{ matrix.project }}"
           echo "🧪 Running smoke E2E for project: $e2e_proj"
+
+          # Skip if there is no corresponding e2e project
+          if ! npx nx show project "$e2e_proj" >/dev/null 2>&1; then
+            echo "ℹ️ No E2E project found for '${{ matrix.project }}' (expected Nx project: $e2e_proj). Skipping."
+            exit 0
+          fi
+
           if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts"; then
             # Copy any generated Cypress screenshots into a temp folder
             mkdir -p artifacts/screenshots/$e2e_proj
