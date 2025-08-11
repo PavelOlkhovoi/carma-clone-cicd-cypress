@@ -2,7 +2,7 @@ describe("x-and-ride smoke test", () => {
   beforeEach(() => cy.visit("/"));
 
   it("map loads with key controls", () => {
-    cy.get("[data-test-id=zoom-control]").should("notbe.visible");
+    cy.get("[data-test-id=zoom-control]").should("be.visible");
 
     cy.get("[data-test-id=fuzzy-search]").should("be.visible");
 
