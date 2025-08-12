@@ -1,0 +1,226 @@
+name: Deploy to GitHub Pages
+
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  determine_projects:
+    runs-on: ubuntu-latest
+    outputs:
+      project_list: ${{ steps.set_up_matrix.outputs.project_list }}
+      is_affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Update submodules
+        run: git submodule update --remote --recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Nx globally
+        run: npm install -g nx
+
+      - name: Set Directory as Safe
+        run: |
+          git config --local --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Derive appropriate SHAs for base and head for `nx affected`
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Print SHAs
+        run: |
+          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
+          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
+          
+
+      - name: Load deployment configuration
+        id: load_config
+        run: |
+          echo "load_config Projects in deployment" 
+          config=$(cat deployment-config.json)
+          project_keys=$(echo "$config" | jq -r '.projects | keys | map(@json) | @json')
+          echo "project_keys=$project_keys" >> $GITHUB_ENV
+          echo "Projects in deployment configuration: $project_keys"  # Debug output
+          echo "::set-output name=deployment_projects::$project_keys"
+
+      - name: Run nx command to show affected projects
+        id: list_affected_projects
+        run: |
+          projects=$(npx nx show projects --affected -t build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }})
+          projects=$(echo $projects | tr '\n' ' ')
+          echo "Affected projects: $projects"
+          echo "::set-output name=project_list::$projects"
+          echo "project_list=$projects" >> $GITHUB_OUTPUT
+      
+      - name: Set up matrix
+        if: steps.list_affected_projects.outputs.project_list != ''
+        id: set_up_matrix
+        run: |
+          # Convert the string into an array by splitting on spaces
+          #IFS=' ' read -r -a project_array <<< "${{ steps.list_affected_projects.outputs.project_list }}"
+
+          projects=$(echo "${{ steps.list_affected_projects.outputs.project_list }}")
+          deployments=$(echo "${{ steps.load_config.outputs.deployment_projects }}"  | jq -r '.[]' | tr '\n' ' ')
+
+          # Convert the string into arrays by splitting on spaces
+          IFS=' ' read -r -a project_array <<< "$projects"
+          IFS=' ' read -r -a deployment_array <<< "$deployments"
+
+          # Declare an empty array to store the common elements
+          result_array=()
+
+
+
+          # Print the content of deployment_array for debugging
+          # echo "Deployment String: $deployments"
+          # echo "Deployment array content: ${deployment_array[@]}"
+          #echo "project_array content: ${project_array[@]}"
+
+          # Declare an empty array to store the common elements
+          result_array=()
+
+          # Iterate over each element in project_array
+          for project in "${project_array[@]}"; do
+              # Check if the project exists in deployment_array
+              if [[ " ${deployment_array[@]} " =~ " ${project} " ]]; then
+                  # If it exists, add it to the result_array
+                  result_array+=("$project")
+              fi
+          done
+
+          # Construct the JSON string manually
+          result_json="["
+          for ((i=0; i<${#result_array[@]}; i++)); do
+              if [[ $i -ne 0 ]]; then
+                  result_json="$result_json, "
+              fi
+              result_json="$result_json\"${result_array[i]}\""
+          done
+          result_json="$result_json]"
+
+          # Print the result JSON
+          # echo "$result_json"
+          echo "::set-output name=project_list::$result_json"
+          echo "PROJECT_LIST=${result_json}" >> $GITHUB_ENV
+      - name: Show project list
+        run: |
+          echo "The project list is |${{ steps.set_up_matrix.outputs.project_list }}|"
+          echo "Is affected: ${{ steps.list_affected_projects.outputs.project_list != '' }}"
+  e2e:
+    needs: determine_projects
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine_projects.outputs.is_affected == 'true' && (github.event.inputs['project-name'] || github.event.client_payload['project-name']) == '' && needs.determine_projects.outputs.project_list != '[]' }}
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine_projects.outputs.project_list) }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+      - name: Update Submodules
+        run: git submodule update --remote --recursive
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: List all projects with an E2E target
+        id: list_all_e2e_projects
+        shell: bash
+        run: |
+          echo "🔍 Listing all projects that declare an e2e target…"
+          raw=$(npx nx show projects --with-target=e2e)
+          echo "Raw E2E-capable projects (one per line):"
+          echo "$raw"
+          
+          # Normalize newlines to spaces
+          normalized=$(echo "$raw" | tr '\n' ' ')
+          echo
+          echo "Normalized E2E list: →$normalized←"
+
+          # Export for later steps
+          echo "e2e_all_projects=$normalized" >> $GITHUB_OUTPUT
+
+      - name: Debug show captured E2E-capable list
+        shell: bash
+        run: |
+          echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
+
+      - name: Run smoke E2E test for ${{ matrix.project }}
+        shell: bash
+        run: |
+          e2e_proj="e2e-${{ matrix.project }}"
+          echo "🧪 Running smoke E2E for project: $e2e_proj"
+
+          # Skip if there is no corresponding e2e project
+          if ! npx nx show project "$e2e_proj" >/dev/null 2>&1; then
+            echo "ℹ️ No E2E project found for '${{ matrix.project }}' (expected Nx project: $e2e_proj). Skipping."
+            exit 0
+          fi
+
+          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache --browser chrome --headless; then
+            # Copy any generated Cypress screenshots into a temp folder
+            mkdir -p artifacts/screenshots/$e2e_proj
+
+            # Determine the Nx project root to locate screenshots reliably
+            root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
+            echo "Resolved $e2e_proj root: $root_dir"
+
+            # Copy from the default Cypress screenshots folder if present
+            if [ -d "$root_dir/cypress/screenshots" ]; then
+              echo "Copying from $root_dir/cypress/screenshots"
+              cp -r "$root_dir/cypress/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
+            fi
+
+            # Copy from report-cy/screenshots (used by some projects)
+            if [ -d "$root_dir/report-cy/screenshots" ]; then
+              echo "Copying from $root_dir/report-cy/screenshots"
+              cp -r "$root_dir/report-cy/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
+            fi
+            
+            # Emit an annotation so you see the failure immediately
+            echo "::error::Smoke E2E FAILED for project $e2e_proj"
+            exit 1
+          fi
+
+      - name: Upload E2E screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots-${{ matrix.project }}
+          path: artifacts/screenshots/e2e-${{ matrix.project }}
