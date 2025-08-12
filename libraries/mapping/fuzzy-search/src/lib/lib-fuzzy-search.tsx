@@ -96,7 +96,6 @@ export function LibFuzzySearch({
   const [value, setValue] = useState("");
   const [cleanBtnDisable, setCleanBtnDisable] = useState(true);
   const [fireScrollEvent, setFireScrollEvent] = useState(null);
-
   const dropdownAlign = {
     points: ["bl", "tl"],
     offset: [0, -4],
