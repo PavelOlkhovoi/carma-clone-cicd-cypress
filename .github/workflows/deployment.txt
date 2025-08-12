@@ -181,46 +181,49 @@ jobs:
         run: |
           echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
-      - name: Run smoke E2E test for ${{ matrix.project }}
+      - name: Check if E2E project exists for ${{ matrix.project }}
+        id: check_e2e_project
         shell: bash
         run: |
           e2e_proj="e2e-${{ matrix.project }}"
-          echo "🧪 Running smoke E2E for project: $e2e_proj"
-
-          # Skip if there is no corresponding e2e project
-          if ! npx nx show project "$e2e_proj" >/dev/null 2>&1; then
-            echo "ℹ️ No E2E project found for '${{ matrix.project }}' (expected Nx project: $e2e_proj). Skipping."
-            exit 0
-          fi
-
-          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache --browser chrome --headless; then
-            # Copy any generated Cypress screenshots into a temp folder
-            mkdir -p artifacts/screenshots/$e2e_proj
-
-            # Determine the Nx project root to locate screenshots reliably
+          echo "🔍 Checking for E2E project: $e2e_proj"
+          
+          if npx nx show project "$e2e_proj" >/dev/null 2>&1; then
+            echo "✅ E2E project found: $e2e_proj"
             root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
-            echo "Resolved $e2e_proj root: $root_dir"
-
-            # Copy from the default Cypress screenshots folder if present
-            if [ -d "$root_dir/cypress/screenshots" ]; then
-              echo "Copying from $root_dir/cypress/screenshots"
-              cp -r "$root_dir/cypress/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
-            fi
-
-            # Copy from report-cy/screenshots (used by some projects)
-            if [ -d "$root_dir/report-cy/screenshots" ]; then
-              echo "Copying from $root_dir/report-cy/screenshots"
-              cp -r "$root_dir/report-cy/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
-            fi
-            
-            # Emit an annotation so you see the failure immediately
-            echo "::error::Smoke E2E FAILED for project $e2e_proj"
-            exit 1
+            echo "Project root: $root_dir"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "project_name=$e2e_proj" >> $GITHUB_OUTPUT
+            echo "working_directory=$root_dir" >> $GITHUB_OUTPUT
+          else
+            echo "ℹ️ No E2E project found for '${{ matrix.project }}' (expected: $e2e_proj). Skipping."
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload E2E screenshots
-        if: failure()
+      - name: Run smoke E2E test for ${{ matrix.project }}
+        if: steps.check_e2e_project.outputs.exists == 'true'
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: ${{ steps.check_e2e_project.outputs.working_directory }}
+          install: false
+          start: npx nx serve ${{ matrix.project }} --port=4201
+          wait-on: 'http://localhost:4201'
+          wait-on-timeout: 120
+          spec: "**/smoke.cy.ts"
+          browser: chrome
+          headed: false
+          summary-title: "Smoke E2E Tests for ${{ matrix.project }}"
+          publish-summary: true
+        env:
+          # Skip Nx cache for E2E tests to ensure fresh runs
+          NX_SKIP_NX_CACHE: true
+
+      - name: Upload E2E screenshots on failure
+        if: failure() && steps.check_e2e_project.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: e2e-screenshots-${{ matrix.project }}
-          path: artifacts/screenshots/e2e-${{ matrix.project }}
+          path: |
+            ${{ steps.check_e2e_project.outputs.working_directory }}/cypress/screenshots
+            ${{ steps.check_e2e_project.outputs.working_directory }}/report-cy/screenshots
+          if-no-files-found: ignore
