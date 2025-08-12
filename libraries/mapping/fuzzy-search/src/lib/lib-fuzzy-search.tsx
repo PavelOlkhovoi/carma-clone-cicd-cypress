@@ -24,7 +24,6 @@ import { SearchGazetteerProps, Option, GroupedOptions } from "..";
 import { stopwords as stopwordsDe } from "./config/stopwords.de-de";
 import "./fuzzy-search.css";
 import { useGazData } from "@carma-apps/portals";
-
 export interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
 }
