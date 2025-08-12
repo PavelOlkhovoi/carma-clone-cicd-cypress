@@ -105,7 +105,6 @@ export function LibFuzzySearch({
       adjustY: 0,
     },
   };
-
   const handleSearchAutoComplete = (value) => {
     if (allGazeteerData.length > 0 && fuseInstance) {
       const removeStopWords = removeStopwords(value, stopwords, prepoHandling);

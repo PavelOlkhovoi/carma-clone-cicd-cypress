@@ -207,8 +207,9 @@ jobs:
           working-directory: ${{ steps.check_e2e_project.outputs.working_directory }}
           spec: "**/smoke.cy.ts"
           browser: chrome
-          headless: true
-          install-command: npm ci
+          headed: false
+          install: false
+          command: npx nx run ${{ steps.check_e2e_project.outputs.project_name }}:e2e --spec="**/smoke.cy.ts" --skip-nx-cache --browser chrome --headless
         env:
           # Skip Nx cache for E2E tests to ensure fresh runs
           NX_SKIP_NX_CACHE: true
