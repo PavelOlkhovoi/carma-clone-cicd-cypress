@@ -206,6 +206,9 @@ jobs:
         with:
           working-directory: ${{ steps.check_e2e_project.outputs.working_directory }}
           install: false
+          start: npx nx serve ${{ matrix.project }} --port=4201
+          wait-on: 'http://localhost:4201'
+          wait-on-timeout: 120
           spec: "**/smoke.cy.ts"
           browser: chrome
           headed: false
