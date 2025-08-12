@@ -29,7 +29,6 @@ export interface FuseWithOption<T> extends Fuse<T> {
   options?: IFuseOptions<T>;
 }
 
-
 const defaultIcon = (
   <FontAwesomeIcon
     icon={faLocationDot}
