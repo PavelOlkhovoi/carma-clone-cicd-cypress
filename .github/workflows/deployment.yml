@@ -193,7 +193,7 @@ jobs:
             exit 0
           fi
 
-          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts"; then
+          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache; then
             # Copy any generated Cypress screenshots into a temp folder
             mkdir -p artifacts/screenshots/$e2e_proj
 
