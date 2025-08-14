@@ -1,0 +1,24 @@
+{
+  "name": "e2epw-kita-finder",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2epw/topicmaps/kita-finder/src",
+  "projectType": "application",
+  "tags": ["smoke"],
+  "implicitDependencies": ["kita-finder"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "options": {
+        "config": "e2epw/topicmaps/kita-finder/playwright.config.ts"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "kita-finder:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
