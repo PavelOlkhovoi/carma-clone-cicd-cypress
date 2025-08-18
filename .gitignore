@@ -47,6 +47,7 @@ Thumbs.db
 **/report-pw/
 **/report-cy/
 **/test-results/
+playwright-report/
 
 # Dev Secrets
 **/devSecrets.json
