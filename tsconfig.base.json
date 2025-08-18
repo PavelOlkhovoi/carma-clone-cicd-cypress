@@ -127,6 +127,7 @@
       ],
       "@carma-commons/resources": ["libraries/commons/resources/src/index.ts"],
       "@carma-commons/types": ["libraries/commons/types/src/index.ts"],
+      "@cismet/e2e-playwright-commons": ["libraries/e2e-playwright-commons/src/index.ts"],
       "@carma-commons/ui/lib-helper-overlay": [
         "libraries/commons/ui/lib-helper-overlay/src/index.ts"
       ],
