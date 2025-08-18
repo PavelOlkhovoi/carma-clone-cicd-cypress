@@ -1,0 +1,24 @@
+{
+  "name": "e2epw-baederkarte",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2epw/topicmaps/baederkarte/src",
+  "projectType": "application",
+  "tags": ["smoke"],
+  "implicitDependencies": ["baederkarte"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "options": {
+        "config": "e2epw/topicmaps/baederkarte/playwright.config.ts"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "baederkarte:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
