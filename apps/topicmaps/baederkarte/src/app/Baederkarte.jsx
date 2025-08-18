@@ -65,7 +65,7 @@ const Baederkarte = () => {
             nativeTooltip={true}
           />
         </Control>
-        <Control position="bottomleft" order={10}>
+        {/* <Control position="bottomleft" order={10}>
           <div style={{ marginTop: "4px" }}>
             <LibFuzzySearch
               pixelwidth={
@@ -85,7 +85,7 @@ const Baederkarte = () => {
               typeInference={defaultTypeInference}
             />
           </div>
-        </Control>
+        </Control> */}
         <TopicMapComponent
           modalMenu={<Menu />}
           gazetteerSearchControl={true}
