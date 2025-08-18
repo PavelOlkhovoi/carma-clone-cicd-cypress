@@ -43,6 +43,11 @@ Thumbs.db
 
 .nx
 
+# Test reports
+**/report-pw/
+**/report-cy/
+**/test-results/
+
 # Dev Secrets
 **/devSecrets.json
 apps/wunda/verkehrszeichenkataster/public/signs/*
@@ -50,8 +55,6 @@ apps/wunda/verkehrszeichenkataster/public/signs/*
 apps/**/.env
 
 # Cypress screenshots
-report-cy/
-
 dispatch.*.event
 .github/workflows/test.yml
 nx-cloud.env
