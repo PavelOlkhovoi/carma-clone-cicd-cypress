@@ -36,7 +36,6 @@ const Baederkarte = () => {
     ResponsiveTopicMapContext
   );
   useSelectionTopicMap();
-
   useEffect(() => {
     if (markerSymbolSize) {
       setClusteringOptions({

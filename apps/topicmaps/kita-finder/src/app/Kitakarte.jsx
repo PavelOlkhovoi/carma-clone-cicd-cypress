@@ -127,4 +127,5 @@ const KitaKarte = () => {
     </div>
   );
 };
+
 export default KitaKarte;
