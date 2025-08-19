@@ -218,6 +218,49 @@ jobs:
             exit 1
           fi
 
+      - name: Run smoke Cypress E2E test for ${{ matrix.project }} (for comparison)
+        shell: bash
+        run: |
+          cypress_proj="e2e-${{ matrix.project }}"
+          echo "🧪 Running smoke Cypress E2E for project: $cypress_proj (for speed comparison)"
+
+          # Skip if there is no corresponding cypress e2e project
+          if ! npx nx show project "$cypress_proj" >/dev/null 2>&1; then
+            echo "ℹ️ No Cypress E2E project found for '${{ matrix.project }}' (expected Nx project: $cypress_proj). Skipping comparison."
+            exit 0
+          fi
+
+          # Record start time for comparison
+          cypress_start_time=$(date +%s)
+          
+          if ! npx nx run "$cypress_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache; then
+            # Copy any generated Cypress screenshots into a temp folder
+            mkdir -p artifacts/cypress-screenshots/$cypress_proj
+
+            # Determine the Nx project root to locate screenshots reliably
+            root_dir=$(npx nx show project "$cypress_proj" --json | jq -r '.root')
+            echo "Resolved $cypress_proj root: $root_dir"
+
+            # Copy from the default Cypress screenshots folder if present
+            if [ -d "$root_dir/cypress/screenshots" ]; then
+              echo "Copying from $root_dir/cypress/screenshots"
+              cp -r "$root_dir/cypress/screenshots"/* artifacts/cypress-screenshots/$cypress_proj/ || true
+            fi
+
+            # Copy from report-cy/screenshots (used by some projects)
+            if [ -d "$root_dir/report-cy/screenshots" ]; then
+              echo "Copying from $root_dir/report-cy/screenshots"
+              cp -r "$root_dir/report-cy/screenshots"/* artifacts/cypress-screenshots/$cypress_proj/ || true
+            fi
+            
+            # Emit an annotation for Cypress failure (but don't fail the build)
+            echo "::warning::Smoke Cypress E2E FAILED for project $cypress_proj (comparison test)"
+          else
+            cypress_end_time=$(date +%s)
+            cypress_duration=$((cypress_end_time - cypress_start_time))
+            echo "✅ Cypress smoke test completed in ${cypress_duration} seconds"
+          fi
+
       - name: Upload E2E reports
         if: failure()
         uses: actions/upload-artifact@v4
