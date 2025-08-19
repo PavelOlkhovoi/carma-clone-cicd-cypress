@@ -4,8 +4,8 @@ import { runMapSmokeTest, setupSmokeTest } from '@cismet/e2e-playwright-commons'
 test.describe('baederkarte smoke test', () => {
   test.beforeEach(async ({ page }) => {
     await setupSmokeTest(page, '/', {
-      navigationTimeout: 30000,
-      waitForNetworkIdle: true
+      navigationTimeout: 5000,
+      waitForNetworkIdle: false
     });
   });
 
