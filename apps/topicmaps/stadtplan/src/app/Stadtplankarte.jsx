@@ -115,7 +115,6 @@ const Stadtplankarte = ({ poiColors }) => {
                     link =
                       "https://www.wuppertal.de/kultur-bildung/schule/medienzentrum/index.php";
                   }
-
                   return (
                     <a href={link} target="_fotos">
                       <IconComp name="copyright" /> {urheber}
