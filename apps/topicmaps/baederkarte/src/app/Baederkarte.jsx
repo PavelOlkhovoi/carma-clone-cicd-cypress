@@ -26,7 +26,6 @@ import {
 import { TAILWIND_CLASSNAMES_FULLSCREEN_FIXED } from "@carma-commons/utils";
 import { ResponsiveTopicMapContext } from "react-cismap/contexts/ResponsiveTopicMapContextProvider";
 import { GenericInfoBoxFromFeature } from "@carma-apps/portals";
-
 const Baederkarte = () => {
   const { setSelectedFeatureByPredicate, setClusteringOptions } = useContext(
     FeatureCollectionDispatchContext
