@@ -184,43 +184,43 @@ jobs:
       - name: Run smoke E2E test for ${{ matrix.project }}
         shell: bash
         run: |
-          e2e_proj="e2epw-${{ matrix.project }}"
-          echo "🧪 Running smoke Playwright E2E for project: $e2e_proj"
+          e2e_proj="e2e-${{ matrix.project }}"
+          echo "🧪 Running smoke E2E for project: $e2e_proj"
 
           # Skip if there is no corresponding e2e project
           if ! npx nx show project "$e2e_proj" >/dev/null 2>&1; then
-            echo "ℹ️ No Playwright E2E project found for '${{ matrix.project }}' (expected Nx project: $e2e_proj). Skipping."
+            echo "ℹ️ No E2E project found for '${{ matrix.project }}' (expected Nx project: $e2e_proj). Skipping."
             exit 0
           fi
 
-          if ! npx nx run "$e2e_proj":e2e --grep=smoke --skip-nx-cache; then
-            # Copy any generated Playwright reports into a temp folder
-            mkdir -p artifacts/reports/$e2e_proj
+          if ! npx nx run "$e2e_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache; then
+            # Copy any generated Cypress screenshots into a temp folder
+            mkdir -p artifacts/screenshots/$e2e_proj
 
-            # Determine the Nx project root to locate reports reliably
+            # Determine the Nx project root to locate screenshots reliably
             root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
             echo "Resolved $e2e_proj root: $root_dir"
 
-            # Copy from the default Playwright report folder if present
-            if [ -d "$root_dir/report-pw" ]; then
-              echo "Copying from $root_dir/report-pw"
-              cp -r "$root_dir/report-pw"/* artifacts/reports/$e2e_proj/ || true
+            # Copy from the default Cypress screenshots folder if present
+            if [ -d "$root_dir/cypress/screenshots" ]; then
+              echo "Copying from $root_dir/cypress/screenshots"
+              cp -r "$root_dir/cypress/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
             fi
 
-            # Copy from playwright-report (default Playwright report folder)
-            if [ -d "$root_dir/playwright-report" ]; then
-              echo "Copying from $root_dir/playwright-report"
-              cp -r "$root_dir/playwright-report"/* artifacts/reports/$e2e_proj/ || true
+            # Copy from report-cy/screenshots (used by some projects)
+            if [ -d "$root_dir/report-cy/screenshots" ]; then
+              echo "Copying from $root_dir/report-cy/screenshots"
+              cp -r "$root_dir/report-cy/screenshots"/* artifacts/screenshots/$e2e_proj/ || true
             fi
             
             # Emit an annotation so you see the failure immediately
-            echo "::error::Smoke Playwright E2E FAILED for project $e2e_proj"
+            echo "::error::Smoke E2E FAILED for project $e2e_proj"
             exit 1
           fi
 
-      - name: Upload E2E reports
+      - name: Upload E2E screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-reports-${{ matrix.project }}
-          path: artifacts/reports/e2epw-${{ matrix.project }}
+          name: e2e-screenshots-${{ matrix.project }}
+          path: artifacts/screenshots/e2e-${{ matrix.project }}
