@@ -187,9 +187,6 @@ jobs:
         run: |
           echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps
-
       - name: Run smoke Playwright E2E test for ${{ matrix.project }}
         shell: bash
         run: |
@@ -202,26 +199,24 @@ jobs:
             exit 0
           fi
 
-          # Get the project root directory for the E2E project
-          root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
-          echo "Resolved $e2e_proj root: $root_dir"
-
-          # Use start-server-and-test to run E2E tests
-          cd "$root_dir"
-          if ! npx start-server-and-test "npx nx serve ${{ matrix.project }} --port=4111" http://localhost:4111 "npx playwright test --grep=smoke"; then
+          if ! npx nx run "$e2e_proj":e2e --grep=smoke --skip-nx-cache --skipInstall; then
             # Copy any generated Playwright reports into a temp folder
-            mkdir -p ../../../artifacts/reports/$e2e_proj
+            mkdir -p artifacts/reports/$e2e_proj
+
+            # Determine the Nx project root to locate reports reliably
+            root_dir=$(npx nx show project "$e2e_proj" --json | jq -r '.root')
+            echo "Resolved $e2e_proj root: $root_dir"
 
             # Copy from the default Playwright report folder if present
-            if [ -d "report-pw" ]; then
-              echo "Copying from report-pw"
-              cp -r report-pw/* ../../../artifacts/reports/$e2e_proj/ || true
+            if [ -d "$root_dir/report-pw" ]; then
+              echo "Copying from $root_dir/report-pw"
+              cp -r "$root_dir/report-pw"/* artifacts/reports/$e2e_proj/ || true
             fi
 
             # Copy from playwright-report (default Playwright report folder)
-            if [ -d "playwright-report" ]; then
-              echo "Copying from playwright-report"
-              cp -r playwright-report/* ../../../artifacts/reports/$e2e_proj/ || true
+            if [ -d "$root_dir/playwright-report" ]; then
+              echo "Copying from $root_dir/playwright-report"
+              cp -r "$root_dir/playwright-report"/* artifacts/reports/$e2e_proj/ || true
             fi
             
             # Emit an annotation so you see the failure immediately
