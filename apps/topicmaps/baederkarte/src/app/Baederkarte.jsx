@@ -32,7 +32,6 @@ const Baederkarte = () => {
   );
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions } = useContext(FeatureCollectionContext);
-
   
   const { responsiveState, gap, windowSize } = useContext(
     ResponsiveTopicMapContext
@@ -48,7 +47,7 @@ const Baederkarte = () => {
     }
   }, [markerSymbolSize]);
 
-  
+
   return (
     <div className={TAILWIND_CLASSNAMES_FULLSCREEN_FIXED}>
       <ControlLayout ifStorybook={false}>
