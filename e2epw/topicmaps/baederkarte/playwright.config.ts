@@ -9,25 +9,23 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env['CI'],
-  /* Retry on CI only */
-  retries: process.env['CI'] ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env['CI'] ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  // reporter: [
-  //   ['html', { outputFolder: './report-pw' }],
-  //   ['json', { outputFile: './report-pw/results.json' }]
-  // ],
+  /* No retries for smoke tests to fail fast */
+  retries: 0,
+  /* Use more workers in CI for speed */
+  workers: process.env['CI'] ? 2 : undefined,
+  /* Minimal reporter for speed */
+  reporter: process.env['CI'] ? 'dot' : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:4111',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    /* Take screenshot on failure */
-    // screenshot: 'only-on-failure',
-    /* Use system Chrome in CI to avoid browser download */
-    // channel: process.env['CI'] ? 'chrome' : undefined,
+    /* No trace collection for speed */
+    trace: 'off',
+    /* No screenshots for speed */
+    screenshot: 'off',
+    /* Faster navigation */
+    navigationTimeout: 15000,
+    actionTimeout: 10000,
   },
 
   /* Configure projects for major browsers */
@@ -37,6 +35,8 @@ export default defineConfig({
       use: { 
         // Use system Chrome in CI
         channel: process.env.CI ? 'chrome' : undefined,
+        // Force headless mode for speed
+        headless: true,
       },
     },
   ],
@@ -46,6 +46,6 @@ export default defineConfig({
     command: 'npx nx serve baederkarte --port=4111',
     url: 'http://localhost:4111',
     reuseExistingServer: true,
-    timeout: 60_000,
+    timeout: 30_000, // Reduced timeout
   },
 });

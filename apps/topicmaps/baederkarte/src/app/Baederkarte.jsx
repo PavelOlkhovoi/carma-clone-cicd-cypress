@@ -33,6 +33,7 @@ const Baederkarte = () => {
   const { markerSymbolSize } = useContext(TopicMapStylingContext);
   const { clusteringOptions } = useContext(FeatureCollectionContext);
 
+  
   const { responsiveState, gap, windowSize } = useContext(
     ResponsiveTopicMapContext
   );

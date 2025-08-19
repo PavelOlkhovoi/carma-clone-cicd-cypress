@@ -14,7 +14,6 @@ const root = ReactDOM.createRoot(
 );
 suppressReactCismapErrors();
 
-
 root.render(
   <StrictMode>
     <Provider store={store}>
