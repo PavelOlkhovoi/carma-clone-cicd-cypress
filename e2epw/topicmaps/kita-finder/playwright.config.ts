@@ -14,9 +14,9 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env['CI'] ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html', { outputFolder: './report-pw' }],
-  ],
+  // reporter: [
+  //   ['html', { outputFolder: './report-pw' }],
+  // ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -24,7 +24,7 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Take screenshot on failure */
-    screenshot: 'only-on-failure',
+    // screenshot: 'only-on-failure',
   },
 
   /* Configure projects for major browsers */
@@ -42,7 +42,7 @@ export default defineConfig({
   webServer: {
     command: 'npx nx serve kita-finder --port=4222',
     url: 'http://localhost:4222',
-    reuseExistingServer: !process.env['CI'],
+    reuseExistingServer: true,
     timeout: 60_000,
   },
 });

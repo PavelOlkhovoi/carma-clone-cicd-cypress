@@ -14,10 +14,10 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env['CI'] ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html', { outputFolder: './report-pw' }],
-    ['json', { outputFile: './report-pw/results.json' }]
-  ],
+  // reporter: [
+  //   ['html', { outputFolder: './report-pw' }],
+  //   ['json', { outputFile: './report-pw/results.json' }]
+  // ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -27,7 +27,7 @@ export default defineConfig({
     /* Take screenshot on failure */
     // screenshot: 'only-on-failure',
     /* Use system Chrome in CI to avoid browser download */
-    channel: process.env['CI'] ? 'chrome' : undefined,
+    // channel: process.env['CI'] ? 'chrome' : undefined,
   },
 
   /* Configure projects for major browsers */
@@ -45,7 +45,7 @@ export default defineConfig({
   webServer: {
     command: 'npx nx serve baederkarte --port=4111',
     url: 'http://localhost:4111',
-    reuseExistingServer: !process.env['CI'],
+    reuseExistingServer: true,
     timeout: 60_000,
   },
 });
