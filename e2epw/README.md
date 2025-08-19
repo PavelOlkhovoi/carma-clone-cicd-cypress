@@ -33,7 +33,14 @@ e2epw/
 
 ```bash
 # Run all Playwright tests
-npx nx run-many --target=e2e --projects="e2epw-*"npx nx run-many --target=e2e --projects="e2epw-*" --skip-nx-cache  
+npx nx run-many --target=e2e --projects="e2epw-*"npx nx run-many --target=e2e --projects="e2epw-*" --skip-nx-cache
+
+# Run playwright smoke tests
+npx nx run-many --target=e2e --projects="e2epw-*" --grep=smoke --ui --skip-nx-cache
+
+# Run smoke tests for project
+npx nx e2e e2epw-kita-finder --grep="smoke" --ui
+
 # Run all Playwright tests for kita-finder
 npx nx e2e e2epw-kita-finder
 
