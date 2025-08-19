@@ -28,7 +28,6 @@ if (typeof global === "undefined") {
   window.global = window;
 }
 
-
 function App() {
   const featureRenderingOption = useSelector(getFeatureRenderingOption);
   const { progress, showProgress, handleProgressUpdate } = useProgress();
