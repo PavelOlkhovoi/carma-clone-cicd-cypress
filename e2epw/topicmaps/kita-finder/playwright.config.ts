@@ -26,13 +26,19 @@ export default defineConfig({
     trace: 'on-first-retry',
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
+    /* Use system Chrome in CI to avoid browser download */
+    channel: process.env['CI'] ? 'chrome' : undefined,
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+        /* Use system Chrome in CI */
+        channel: process.env['CI'] ? 'chrome' : undefined,
+      },
     },
 
     {
