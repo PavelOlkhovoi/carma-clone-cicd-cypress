@@ -181,7 +181,7 @@ jobs:
         run: |
           echo "All E2E projects: ${{ steps.list_all_e2e_projects.outputs.e2e_all_projects }}"
 
-      - name: Run smoke E2E test for ${{ matrix.project }}
+      - name: Run smoke Playwright E2E test for ${{ matrix.project }}
         shell: bash
         run: |
           e2e_proj="e2epw-${{ matrix.project }}"
@@ -229,9 +229,6 @@ jobs:
             echo "ℹ️ No Cypress E2E project found for '${{ matrix.project }}' (expected Nx project: $cypress_proj). Skipping comparison."
             exit 0
           fi
-
-          # Record start time for comparison
-          cypress_start_time=$(date +%s)
           
           if ! npx nx run "$cypress_proj":e2e --spec="**/smoke.cy.ts" --skip-nx-cache; then
             # Copy any generated Cypress screenshots into a temp folder
@@ -256,9 +253,7 @@ jobs:
             # Emit an annotation for Cypress failure (but don't fail the build)
             echo "::warning::Smoke Cypress E2E FAILED for project $cypress_proj (comparison test)"
           else
-            cypress_end_time=$(date +%s)
-            cypress_duration=$((cypress_end_time - cypress_start_time))
-            echo "✅ Cypress smoke test completed in ${cypress_duration} seconds"
+            echo "✅ Cypress smoke test completed successfully"
           fi
 
       - name: Upload E2E reports
