@@ -52,7 +52,6 @@ const Stadtplankarte = ({ poiColors }) => {
       });
     }
   }, [markerSymbolSize]);
-  
   return (
     <div className={TAILWIND_CLASSNAMES_FULLSCREEN_FIXED}>
       <ControlLayout ifStorybook={false}>
