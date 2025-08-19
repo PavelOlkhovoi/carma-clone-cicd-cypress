@@ -4,8 +4,8 @@ import { runMapSmokeTest, setupSmokeTest } from '@cismet/e2e-playwright-commons'
 test.describe('baederkarte smoke test', () => {
   test.beforeEach(async ({ page }) => {
     await setupSmokeTest(page, '/', {
-      navigationTimeout: 5000,
-      waitForNetworkIdle: false
+      navigationTimeout: 30000,
+      waitForNetworkIdle: true
     });
   });
 
@@ -13,10 +13,10 @@ test.describe('baederkarte smoke test', () => {
     // Run the comprehensive smoke test from the shared library
     await runMapSmokeTest(page, {
       fuzzySearchTimeout: 10000,
-      // checkZoomControl: true,
-      // checkFuzzySearch: true,
-      // checkApplicationMenu: true,
-      // checkInfoBox: true
+      checkZoomControl: true,
+      checkFuzzySearch: true,
+      checkApplicationMenu: true,
+      checkInfoBox: true
     });
   });
 });
