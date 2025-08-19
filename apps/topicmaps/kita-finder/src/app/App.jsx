@@ -31,7 +31,6 @@ if (typeof global === "undefined") {
 function App() {
   const featureRenderingOption = useSelector(getFeatureRenderingOption);
   const { progress, showProgress, handleProgressUpdate } = useProgress();
-
   const filters = {};
   traegertypMap.forEach((traeger) => {
     filters[traeger.text] = true;
