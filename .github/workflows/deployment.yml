@@ -193,7 +193,7 @@ jobs:
             exit 0
           fi
 
-          if ! npx nx run "$e2e_proj":e2e --grep=smoke --skip-nx-cache; then
+          if ! npx nx run "$e2e_proj":e2e --grep=smoke --skip-nx-cache --skipInstall; then
             # Copy any generated Playwright reports into a temp folder
             mkdir -p artifacts/reports/$e2e_proj
 
