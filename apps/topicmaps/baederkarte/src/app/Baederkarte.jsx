@@ -123,5 +123,4 @@ const Baederkarte = () => {
   );
 };
 
-
 export default Baederkarte;

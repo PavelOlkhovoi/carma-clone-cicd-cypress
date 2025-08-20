@@ -136,5 +136,4 @@ const Stadtplankarte = ({ poiColors }) => {
   );
 };
 
-
 export default Stadtplankarte;
