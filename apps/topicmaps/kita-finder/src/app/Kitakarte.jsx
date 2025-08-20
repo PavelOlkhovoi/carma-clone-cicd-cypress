@@ -128,5 +128,4 @@ const KitaKarte = () => {
   );
 };
 
-
 export default KitaKarte;

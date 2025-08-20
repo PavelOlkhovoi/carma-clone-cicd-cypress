@@ -122,5 +122,4 @@ const Baederkarte = () => {
     </div>
   );
 };
-
 export default Baederkarte;
