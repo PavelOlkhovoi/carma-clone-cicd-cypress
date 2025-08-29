@@ -59,6 +59,8 @@ export function LibFuzzySearch({
   },
   selection,
 }: SearchGazetteerProps) {
+
+  
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setShowCategories] = useState(standardSearch);
   const { prepoHandling, ifShowScore, limit, cut, distance, threshold } =
