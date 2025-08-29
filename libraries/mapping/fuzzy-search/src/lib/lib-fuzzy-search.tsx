@@ -60,7 +60,7 @@ export function LibFuzzySearch({
   selection,
 }: SearchGazetteerProps) {
 
-  
+
   const [options, setOptions] = useState<Option[]>([]);
   const [showCategories, setShowCategories] = useState(standardSearch);
   const { prepoHandling, ifShowScore, limit, cut, distance, threshold } =
@@ -179,7 +179,6 @@ export function LibFuzzySearch({
       setAllGazeteerData(allModifiedData);
     }
   }, [_gazData, prepoHandling]);
-
   useEffect(() => {
     if (!fuseInstance && allGazeteerData.length > 0) {
       const fuseAddressesOptions = {

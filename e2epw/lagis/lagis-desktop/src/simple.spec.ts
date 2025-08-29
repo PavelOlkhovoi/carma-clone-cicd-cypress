@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('lagis smoke test', () => {
+test.describe('lagis test', () => {
   let userData: any;
 
   test.beforeAll(async () => {
