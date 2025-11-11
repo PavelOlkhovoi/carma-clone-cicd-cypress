@@ -26,21 +26,53 @@ export const useUrlFeatureSelection = (
     ) {
       console.log("xxx hasProcessedUrl 2");
       if (window.location.hash) {
-        // parse without the leading '#'
-        const myParams = new URLSearchParams(window.location.hash.slice(1));
+        // Remove leading '#' and any leading '/' or '?'
+        let hashContent = window.location.hash.slice(1);
+        // Handle patterns like #/? or #? or #/
+        hashContent = hashContent.replace(/^[\/\?]+/, '');
+        
+        const myParams = new URLSearchParams(hashContent);
         const objectId = myParams.get("tmSelectionObject");
         console.log("xxx found objectId", objectId);
-        // do whatever selection logic you need here, then remove the param
+
         myParams.delete("tmSelectionObject");
-        // build a new hash string (empty string if no params remain)
-        const rebuilt = myParams.toString(); // '' or 'a=1&b=2'
-        const newHash = rebuilt ? `#${rebuilt}` : "";
-        // construct a new URL without changing path/search
+        const rebuilt = myParams.toString();
+        // Preserve the original hash prefix pattern (e.g., #/?)
+        const hashPrefix = window.location.hash.match(/^#[\/\?]*/)?.[0] || '#';
+        const newHash = rebuilt ? `${hashPrefix}${rebuilt}` : "";
         const newUrl =
           window.location.pathname + window.location.search + newHash;
-        // mark processed and replace the URL (no page reload)
+
         hasProcessedUrl.current = true;
         window.history.replaceState({}, "", newUrl);
+
+        // INTERCEPT future pushState calls to remove tmSelectionObject
+        const originalPushState = window.history.pushState;
+        window.history.pushState = function (data, unused, url) {
+          if (
+            url &&
+            typeof url === "string" &&
+            url.includes("tmSelectionObject")
+          ) {
+            // Remove tmSelectionObject from the URL before pushing
+            const hashIndex = url.indexOf("#");
+            if (hashIndex !== -1) {
+              const beforeHash = url.substring(0, hashIndex);
+              let afterHash = url.substring(hashIndex + 1);
+              
+              // Extract and preserve hash prefix (e.g., /?)
+              const prefixMatch = afterHash.match(/^[\/\?]*/);
+              const hashPrefix = prefixMatch ? prefixMatch[0] : '';
+              const hashParams = afterHash.replace(/^[\/\?]+/, '');
+              
+              const params = new URLSearchParams(hashParams);
+              params.delete("tmSelectionObject");
+              const newHash = params.toString();
+              url = newHash ? `${beforeHash}#${hashPrefix}${newHash}` : beforeHash;
+            }
+          }
+          return originalPushState.apply(this, [data, unused, url]);
+        };
       }
     }
   }, [initializingFeatures, shownFeatures]);
